@@ -9,9 +9,11 @@ class text_box final
 public:
 	text_box()
 		: hwnd_base(L"EDIT")
+		, multiline_(true)
+		, readonly_(false)
 	{
 		set_width(100);
-		set_style(style() | window_style::tab_stop | window_style::editcontrol_left | window_style::editcontrol_auto_horizontal_scroll | window_style::border);
+		set_style(style()| window_style::tab_stop | window_style::editcontrol_left | window_style::editcontrol_multiline | window_style::editcontrol_want_return | window_style::border);
 	}
 
 	text_box(::std::wstring text)
@@ -25,6 +27,15 @@ public:
 
 public:
 	::std::wstring const& text() const noexcept;
+
+	bool multiline() const noexcept { return multiline_; }
+	void set_multiline(bool value) noexcept;
+
+	bool readonly() const noexcept { return readonly_; }
+	void set_readonly(bool value) noexcept;
+
+private:
+	bool multiline_, readonly_;
 };
 
 }

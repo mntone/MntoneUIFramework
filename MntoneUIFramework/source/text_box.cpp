@@ -10,8 +10,10 @@ HRESULT text_box::measure_override(mnfx::size available, mnfx::size& desired) no
 {
 	auto scale_factor = root().scale_factor();
 	RECT expected = { 0, 0, scale_factor.scale_x(available.width), scale_factor.scale_y(available.height) };
+	UINT format = DT_LEFT | DT_CALCRECT;
+	if (multiline_) format |= DT_WORDBREAK;
 	HDC hdc = GetDC(hwnd());
-	DrawTextW(hdc, text_.c_str(), text_.length(), &expected, DT_LEFT | DT_CALCRECT);
+	DrawTextW(hdc, text_.c_str(), text_.length(), &expected, format);
 	ReleaseDC(hwnd(), hdc);
 
 	desired.height = scale_factor.scale_inverse_y<dialog_unit>(expected.bottom);
@@ -23,8 +25,10 @@ HRESULT text_box::arrange_override(rect& final) noexcept
 {
 	auto scale_factor = root().scale_factor();
 	RECT expected = { 0, 0, scale_factor.scale_x(final.width), scale_factor.scale_y(final.height) };
+	UINT format = DT_LEFT | DT_CALCRECT;
+	if (multiline_) format |= DT_WORDBREAK;
 	HDC hdc = GetDC(hwnd());
-	DrawTextW(hdc, text_.c_str(), text_.length(), &expected, DT_LEFT | DT_CALCRECT);
+	DrawTextW(hdc, text_.c_str(), text_.length(), &expected, format);
 	ReleaseDC(hwnd(), hdc);
 
 	final.height = max(final.height, scale_factor.scale_inverse_y<dialog_unit>(expected.bottom));
@@ -41,4 +45,32 @@ wstring const& text_box::text() const noexcept
 		GetWindowTextW(hwnd(), &text_[0], length + 1);
 	}
 	return text_;
+}
+
+void text_box::set_multiline(bool value) noexcept
+{
+	multiline_ = move(value);
+
+	auto current_style = style();
+	if (multiline_)
+	{
+		current_style |= window_style::editcontrol_multiline | window_style::editcontrol_want_return;
+		current_style &= ~window_style::editcontrol_auto_horizontal_scroll;
+	}
+	else
+	{
+		current_style &= ~(window_style::editcontrol_multiline | window_style::editcontrol_want_return);
+		current_style |= window_style::editcontrol_auto_horizontal_scroll;
+	}
+	set_style(current_style);
+}
+
+void text_box::set_readonly(bool value) noexcept
+{
+	readonly_ = move(value);
+
+	auto current_style = style();
+	if (readonly_)current_style |= window_style::editcontrol_readonly;
+	else current_style &= ~window_style::editcontrol_readonly;
+	set_style(current_style);
 }
