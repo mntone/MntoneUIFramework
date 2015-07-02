@@ -76,5 +76,8 @@
     <ClCompile Include="source\text_box.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\hwnd_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

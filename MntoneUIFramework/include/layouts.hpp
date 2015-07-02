@@ -23,7 +23,7 @@ public:
 
 protected:
 	virtual HRESULT measure_override(::mnfx::size available, ::mnfx::size& desired) noexcept;
-	virtual HRESULT arrange_override(::mnfx::rect final) noexcept;
+	virtual HRESULT arrange_override(::mnfx::rect& final) noexcept;
 
 	virtual HRESULT on_initialize() noexcept final;
 	virtual HRESULT on_enable(bool enable) noexcept final;
@@ -91,7 +91,7 @@ public:
 
 protected:
 	virtual HRESULT measure_override(::mnfx::size available, ::mnfx::size& desired) noexcept;
-	virtual HRESULT arrange_override(::mnfx::rect final) noexcept;
+	virtual HRESULT arrange_override(::mnfx::rect& final) noexcept;
 
 private:
 	void reset_grid_info() noexcept;

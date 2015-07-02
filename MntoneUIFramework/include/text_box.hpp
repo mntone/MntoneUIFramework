@@ -20,6 +20,9 @@ public:
 		set_text(text);
 	}
 
+	virtual HRESULT measure_override(::mnfx::size available, ::mnfx::size& desired) noexcept;
+	virtual HRESULT arrange_override(::mnfx::rect& final) noexcept;
+
 public:
 	::std::wstring const& text() const noexcept;
 };

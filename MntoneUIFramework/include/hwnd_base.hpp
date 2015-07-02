@@ -6,6 +6,8 @@ namespace mnfx {
 class hwnd_base
 	: public control_base
 {
+	friend class window;
+
 public:
 	hwnd_base(::std::wstring class_name);
 	virtual ~hwnd_base();
@@ -17,7 +19,7 @@ public:
 
 protected:
 	virtual HRESULT measure_override(::mnfx::size available, ::mnfx::size& desired) noexcept;
-	virtual HRESULT arrange_override(::mnfx::rect final) noexcept;
+	virtual HRESULT arrange_override(::mnfx::rect& final) noexcept;
 
 	virtual HRESULT on_initialize() noexcept;
 	virtual HRESULT on_enable(bool enable) noexcept final;
@@ -40,13 +42,14 @@ public:
 	void set_exstyle(extended_window_style value) noexcept;
 
 protected:
-	HWND hwnd_;
 	::std::wstring class_name_;
 	mutable std::wstring text_;
+
+private:
+	HWND hwnd_;
 	window_style style_;
 	extended_window_style exstyle_;
 
-private:
 	static NONCLIENTMETRICSW non_client_metrics_;
 	static HFONT gui_font_;
 };

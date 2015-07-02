@@ -21,7 +21,7 @@ public:
 
 protected:
 	virtual HRESULT measure_override(::mnfx::size available, ::mnfx::size& desired) noexcept = 0;
-	virtual HRESULT arrange_override(::mnfx::rect final) noexcept = 0;
+	virtual HRESULT arrange_override(::mnfx::rect& final) noexcept = 0;
 
 	virtual HRESULT on_initialize() noexcept = 0;
 	virtual HRESULT on_enable(bool enable) noexcept = 0;

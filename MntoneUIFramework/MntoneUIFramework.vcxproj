@@ -97,6 +97,7 @@
     <ClInclude Include="source\targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\hwnd_base.cpp" />
     <ClCompile Include="source\radio_button.cpp" />
     <ClCompile Include="source\control_base.cpp" />
     <ClCompile Include="source\layouts.cpp" />

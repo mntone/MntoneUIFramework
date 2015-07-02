@@ -20,7 +20,7 @@ HRESULT panel::measure_override(mnfx::size available, mnfx::size& desired) noexc
 	return S_OK;
 }
 
-HRESULT panel::arrange_override(rect final) noexcept
+HRESULT panel::arrange_override(rect& final) noexcept
 {
 	for (auto&& child : children_)
 	{
@@ -157,7 +157,7 @@ void grid::reset_grid_info() noexcept
 	}
 }
 
-HRESULT grid::get_target_desired_size(size_t row, size_t column, ::mnfx::size*& desired_size) noexcept
+HRESULT grid::get_target_desired_size(size_t row, size_t column, mnfx::size*& desired_size) noexcept
 {
 	if (row > row_definition_.size()) return E_INVALIDARG;
 	if (column > column_definition_.size()) return E_INVALIDARG;
@@ -171,7 +171,7 @@ bool grid::grid_info_valid() const noexcept
 	return grid_info_.size() == (row_definition_.size() * column_definition_.size());
 }
 
-HRESULT grid::arrange_override(rect final) noexcept
+HRESULT grid::arrange_override(rect& final) noexcept
 {
 	HRESULT hr = S_OK;
 	if (!grid_info_valid()) hr = measure(final.size());

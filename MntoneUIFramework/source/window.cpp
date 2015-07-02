@@ -67,7 +67,7 @@ HRESULT window::initialize(HINSTANCE hinstance, window const* owner) noexcept
 		nullptr,
 		hinstance_,
 		this);
-	if (!hwnd_) return E_FAIL;
+	if (!hwnd()) return E_FAIL;
 
 	BOOL b = UpdateWindow(hwnd());
 	if (b == 0) return HRESULT_FROM_WIN32(GetLastError());
@@ -121,7 +121,7 @@ HRESULT window::measure_override(mnfx::size available, mnfx::size& desired) noex
 	return hr;
 }
 
-HRESULT window::arrange_override(rect final) noexcept
+HRESULT window::arrange_override(rect& final) noexcept
 {
 	if (child_ == nullptr) return S_OK;
 	return child_->arrange(final);

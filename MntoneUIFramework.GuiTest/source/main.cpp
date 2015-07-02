@@ -10,7 +10,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE hprevious_ins
 	using namespace mnfx;
 
 	// auto release (by parent elements)
-	text_box* tb = new text_box(L"initial text.");
+	text_box* tb = new text_box(L"initial text.‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
 	button* btn = new button(L"push button sample");
 	grid* root = new grid(
 	{ grid_length(), 28 },

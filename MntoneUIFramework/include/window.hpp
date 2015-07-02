@@ -32,7 +32,7 @@ protected:
 	virtual LRESULT window_procedure(window_message message, WPARAM wparam, LPARAM lparam, bool& handled) noexcept;
 
 	virtual HRESULT measure_override(::mnfx::size available, ::mnfx::size& desired) noexcept;
-	virtual HRESULT arrange_override(::mnfx::rect final) noexcept;
+	virtual HRESULT arrange_override(::mnfx::rect& final) noexcept;
 
 	virtual HRESULT on_initialize() noexcept;
 	virtual HRESULT on_create() noexcept { return S_OK; }
