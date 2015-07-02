@@ -239,6 +239,12 @@ HRESULT window::on_rearrange(mnfx::rect pr) noexcept
 	return S_OK;
 }
 
+HRESULT window::on_command_internal(HWND target, WORD id, WORD notify_code, bool& handled, bool& traversed) noexcept
+{
+	if (child_ == nullptr) return S_OK;
+	return child_->on_command_internal(target, id, notify_code, handled, traversed);
+}
+
 HRESULT window::prepare_resize(LPARAM lparam) noexcept
 {
 	if (initialized_)
@@ -257,7 +263,8 @@ HRESULT window::prepare_command(WPARAM wparam, LPARAM lparam, bool& handled) noe
 	WORD id = LOWORD(wparam);
 	WORD notify_code = HIWORD(wparam);
 	HWND target = reinterpret_cast<HWND>(lparam);
-	return on_command(target, id, notify_code, handled);
+	bool traversed = false;
+	return on_command_internal(target, id, notify_code, handled, traversed);
 }
 
 HRESULT window::prepare_dpi_changed(WPARAM wparam, LPARAM lparam) noexcept

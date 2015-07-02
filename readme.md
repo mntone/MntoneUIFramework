@@ -3,8 +3,14 @@
 This is UI Framework for Windows like xaml.　The next program is sample code.
 
 ```C++
-text_box* tb = new text_box(L"initial text.");
+text_box* tb = new text_box(L"initial text.あああああああああああああああああああああああああ");
 button* btn = new button(L"push button sample");
+size_t id = 0;
+btn->click().add([](control_base const& s, event_args e)
+{
+	MessageBoxW(s.root().hwnd(), L"clicked.", L"sample dialog", MB_OK);
+	return S_OK;
+}, id);
 grid* root = new grid(
 { grid_length(), 28 },
 { },

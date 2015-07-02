@@ -30,7 +30,7 @@ protected:
 	virtual HRESULT on_reposition(::mnfx::point /*point*/) noexcept final { return S_OK; }
 	virtual HRESULT on_resize(::mnfx::size /*size*/) noexcept final { return S_OK; }
 	virtual HRESULT on_rearrange(::mnfx::rect /*rect*/) noexcept final { return S_OK; }
-	virtual HRESULT on_command(HWND target, WORD id, WORD notify_code, bool& handled) noexcept final;
+	virtual HRESULT on_command_internal(HWND target, WORD id, WORD notify_code, bool& handled, bool& traversed) noexcept final;
 
 public:
 	virtual HWND const& hwnd() const noexcept { return parent()->hwnd(); }

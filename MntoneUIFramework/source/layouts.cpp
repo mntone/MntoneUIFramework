@@ -51,14 +51,14 @@ HRESULT panel::on_enable(bool enable) noexcept
 	return error_hr;
 }
 
-HRESULT panel::on_command(HWND target, WORD id, WORD notify_code, bool& handled) noexcept
+HRESULT panel::on_command_internal(HWND target, WORD id, WORD notify_code, bool& handled, bool& traversed) noexcept
 {
 	HRESULT hr = S_OK;
 	for (auto&& child : children_)
 	{
-		hr = child->on_command(target, id, notify_code, handled);
+		hr = child->on_command_internal(target, id, notify_code, handled, traversed);
 		if (FAILED(hr)) return hr;
-		if (handled) return hr;
+		if (traversed) return hr;
 	}
 	return S_OK;
 }

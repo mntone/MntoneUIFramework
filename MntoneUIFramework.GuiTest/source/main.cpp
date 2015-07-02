@@ -12,6 +12,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE hprevious_ins
 	// auto release (by parent elements)
 	text_box* tb = new text_box(L"initial text.‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
 	button* btn = new button(L"push button sample");
+	size_t id = 0;
+	btn->click().add([](control_base const& s, event_args e)
+	{
+		MessageBoxW(s.root().hwnd(), L"clicked.", L"sample dialog", MB_OK);
+		return S_OK;
+	}, id);
 	grid* root = new grid(
 	{ grid_length(), 28 },
 	{ },

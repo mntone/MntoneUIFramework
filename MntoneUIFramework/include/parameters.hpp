@@ -77,14 +77,14 @@ class event_handler final
 {
 public:
 	event_handler()
-		: unique_id_(0)
+		: unique_id_(1)
 	{ }
 
 	HRESULT add(::std::function<HRESULT(control_base const&, args)> callback, size_t& id) const noexcept
 	{
 		auto tmp = callbacks_.size();
 		id = 0;
-		callbacks_.emplace_back(unique_id_++, callback);
+		callbacks_.emplace(unique_id_++, callback);
 		id = tmp;
 		return S_OK;
 	}
@@ -96,10 +96,12 @@ public:
 
 	HRESULT invoke(control_base const& sender, args e) noexcept
 	{
+		if (callbacks_.size() == 0) return S_FALSE;
+
 		HRESULT error_hr = S_OK;
-		for (callback : callbacks_)
+		for (auto&& callback : callbacks_)
 		{
-			HRESULT hr = callback(sender, e);
+			HRESULT hr = callback.second(sender, e);
 			if (FAILED(hr)) error_hr = hr;
 		}
 		return error_hr;

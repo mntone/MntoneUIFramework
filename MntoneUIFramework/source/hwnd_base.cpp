@@ -107,8 +107,14 @@ HRESULT hwnd_base::on_rearrange(::mnfx::rect rect) noexcept
 		static_cast<int32_t>(ceil(root().scale_factor().scale_x(rect.width))));
 }
 
-HRESULT hwnd_base::on_command(HWND target, WORD id, WORD notify_code, bool& handled) noexcept
+HRESULT hwnd_base::on_command_internal(HWND target, WORD id, WORD notify_code, bool& handled, bool& traversed) noexcept
 {
+	if (is_self(target))
+	{
+		HRESULT hr = on_command(id, notify_code, handled);
+		traversed = true;
+		return hr;
+	}
 	return S_OK;
 }
 

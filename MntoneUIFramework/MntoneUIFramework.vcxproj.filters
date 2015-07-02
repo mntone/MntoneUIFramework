@@ -79,5 +79,8 @@
     <ClCompile Include="source\hwnd_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

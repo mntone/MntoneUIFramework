@@ -19,6 +19,9 @@ public:
 		set_text(text);
 	}
 
+protected:
+	virtual HRESULT on_command(WORD id, WORD notify_code, bool& handled) noexcept;
+
 public:
 	event_handler<event_args> const& click() { return click_; }
 

@@ -1,6 +1,16 @@
 #pragma once
 #include <Windows.h>
 
+#define DEFINE_ENUM_BIT_CALC(_T_) \
+using _T_ ## _t = ::std::underlying_type_t<_T_>; \
+inline _T_ operator&(_T_ lhs, _T_ rhs) { return static_cast<_T_>(static_cast<_T_ ## _t>(lhs) & static_cast<_T_ ## _t>(rhs)); } \
+inline _T_ operator&=(_T_& lhs, _T_ rhs) { lhs = static_cast<_T_>(static_cast<_T_ ## _t>(lhs) & static_cast<_T_ ## _t>(rhs)); return lhs; } \
+inline _T_ operator|(_T_ lhs, _T_ rhs) { return static_cast<_T_>(static_cast<_T_ ## _t>(lhs) | static_cast<_T_ ## _t>(rhs)); } \
+inline _T_ operator|=(_T_& lhs, _T_ rhs) { lhs = static_cast<_T_>(static_cast<_T_ ## _t>(lhs) | static_cast<_T_ ## _t>(rhs)); return lhs; } \
+inline _T_ operator^(_T_ lhs, _T_ rhs) { return static_cast<_T_>(static_cast<_T_ ## _t>(lhs) ^ static_cast<_T_ ## _t>(rhs)); } \
+inline _T_ operator^=(_T_& lhs, _T_ rhs) { lhs = static_cast<_T_>(static_cast<_T_ ## _t>(lhs) ^ static_cast<_T_ ## _t>(rhs)); return lhs; } \
+inline _T_ operator~(_T_ one) { return static_cast<_T_>(~static_cast<_T_ ## _t>(one)); }
+
 namespace mnfx {
 
 enum class window_message : UINT
@@ -497,38 +507,7 @@ enum class window_style : DWORD
 	static_word_ellipsis = SS_WORDELLIPSIS,
 	static_ellipsis_mask = SS_ELLIPSISMASK,
 };
-using window_style_t = ::std::underlying_type_t<window_style>;
-inline window_style operator&(window_style lhs, window_style rhs)
-{
-	return static_cast<window_style>(static_cast<window_style_t>(lhs) & static_cast<window_style_t>(rhs));
-}
-inline window_style operator&=(window_style& lhs, window_style rhs)
-{
-	lhs = static_cast<window_style>(static_cast<window_style_t>(lhs) & static_cast<window_style_t>(rhs));
-	return lhs;
-}
-inline window_style operator|(window_style lhs, window_style rhs)
-{
-	return static_cast<window_style>(static_cast<window_style_t>(lhs) | static_cast<window_style_t>(rhs));
-}
-inline window_style operator|=(window_style& lhs, window_style rhs)
-{
-	lhs = static_cast<window_style>(static_cast<window_style_t>(lhs) | static_cast<window_style_t>(rhs));
-	return lhs;
-}
-inline window_style operator^(window_style lhs, window_style rhs)
-{
-	return static_cast<window_style>(static_cast<window_style_t>(lhs) ^ static_cast<window_style_t>(rhs));
-}
-inline window_style operator^=(window_style& lhs, window_style rhs)
-{
-	lhs = static_cast<window_style>(static_cast<window_style_t>(lhs) ^ static_cast<window_style_t>(rhs));
-	return lhs;
-}
-inline window_style operator~(window_style one)
-{
-	return static_cast<window_style>(~static_cast<window_style_t>(one));
-}
+DEFINE_ENUM_BIT_CALC(window_style);
 
 enum class extended_window_style : DWORD
 {
@@ -584,37 +563,23 @@ enum class extended_window_style : DWORD
 	no_activate = WS_EX_NOACTIVATE,
 #endif
 };
-using extended_window_style_t = ::std::underlying_type_t<extended_window_style>;
-inline extended_window_style operator&(extended_window_style lhs, extended_window_style rhs)
+DEFINE_ENUM_BIT_CALC(extended_window_style);
+
+enum class button_notify_code : WORD
 {
-	return static_cast<extended_window_style>(static_cast<extended_window_style_t>(lhs) & static_cast<extended_window_style_t>(rhs));
-}
-inline extended_window_style operator&=(extended_window_style& lhs, extended_window_style rhs)
-{
-	lhs = static_cast<extended_window_style>(static_cast<extended_window_style_t>(lhs) & static_cast<extended_window_style_t>(rhs));
-	return lhs;
-}
-inline extended_window_style operator|(extended_window_style lhs, extended_window_style rhs)
-{
-	return static_cast<extended_window_style>(static_cast<extended_window_style_t>(lhs) | static_cast<extended_window_style_t>(rhs));
-}
-inline extended_window_style operator|=(extended_window_style& lhs, extended_window_style rhs)
-{
-	lhs = static_cast<extended_window_style>(static_cast<extended_window_style_t>(lhs) | static_cast<extended_window_style_t>(rhs));
-	return lhs;
-}
-inline extended_window_style operator^(extended_window_style lhs, extended_window_style rhs)
-{
-	return static_cast<extended_window_style>(static_cast<extended_window_style_t>(lhs) ^ static_cast<extended_window_style_t>(rhs));
-}
-inline extended_window_style operator^=(extended_window_style& lhs, extended_window_style rhs)
-{
-	lhs = static_cast<extended_window_style>(static_cast<extended_window_style_t>(lhs) ^ static_cast<extended_window_style_t>(rhs));
-	return lhs;
-}
-inline extended_window_style operator~(extended_window_style one)
-{
-	return static_cast<extended_window_style>(~static_cast<extended_window_style_t>(one));
-}
+	clicked = BN_CLICKED,
+	paint = BN_PAINT,
+	highlight = BN_HILITE,
+	unhighlight = BN_UNHILITE,
+	disable = BN_DISABLE,
+	double_clicked = BN_DOUBLECLICKED,
+#if(WINVER >= 0x0400)
+	pushed = BN_PUSHED,
+	unpushed = BN_UNPUSHED,
+	set_focus = BN_SETFOCUS,
+	kill_focus = BN_KILLFOCUS,
+#endif
+};
+DEFINE_ENUM_BIT_CALC(button_notify_code);
 
 }

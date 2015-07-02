@@ -28,7 +28,7 @@ protected:
 	virtual HRESULT on_reposition(::mnfx::point /*point*/) noexcept = 0;
 	virtual HRESULT on_resize(::mnfx::size /*size*/) noexcept = 0;
 	virtual HRESULT on_rearrange(::mnfx::rect /*rect*/) noexcept = 0;
-	virtual HRESULT on_command(HWND target, WORD id, WORD notify_code, bool& handled) noexcept = 0;
+	virtual HRESULT on_command_internal(HWND target, WORD id, WORD notify_code, bool& handled, bool& traversed) noexcept = 0;
 
 public:
 	virtual window const& root() const noexcept { return parent_->root(); }

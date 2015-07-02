@@ -39,6 +39,7 @@ protected:
 	virtual HRESULT on_reposition(::mnfx::point point) noexcept;
 	virtual HRESULT on_resize(::mnfx::size size) noexcept;
 	virtual HRESULT on_rearrange(::mnfx::rect rect) noexcept;
+	virtual HRESULT on_command_internal(HWND target, WORD id, WORD notify_code, bool& handled, bool& traversed) noexcept;
 	virtual HRESULT on_dpi_changed(const RECT /*suggest*/) const noexcept { return S_OK; }
 
 private:
