@@ -4,3 +4,4 @@ obj/
 ipch/
 *.sdf
 *.opensdf
+*.vcxproj.user
