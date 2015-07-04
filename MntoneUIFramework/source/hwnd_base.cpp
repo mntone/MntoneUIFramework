@@ -47,7 +47,7 @@ HRESULT hwnd_base::initialize(control_base const& parent) noexcept
 		0,
 		static_cast<int>(ceil(root().scale_factor().scale_x(width_))),
 		static_cast<int>(ceil(root().scale_factor().scale_y(height_))),
-		((hwnd_base*)&parent)->hwnd(), // todo
+		parent.hwnd(),
 		nullptr,
 		root().hinstance(),
 		nullptr);

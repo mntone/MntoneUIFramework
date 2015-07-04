@@ -8,7 +8,7 @@ using namespace mnfx;
 
 HRESULT text_box::measure_override(mnfx::size available, mnfx::size& desired) noexcept
 {
-	auto scale_factor = root().scale_factor();
+	auto& scale_factor = root().scale_factor();
 	RECT expected = { 0, 0, scale_factor.scale_x(available.width), scale_factor.scale_y(available.height) };
 	UINT format = DT_LEFT | DT_CALCRECT;
 	if (multiline_) format |= DT_WORDBREAK;
@@ -23,7 +23,7 @@ HRESULT text_box::measure_override(mnfx::size available, mnfx::size& desired) no
 
 HRESULT text_box::arrange_override(rect& final) noexcept
 {
-	auto scale_factor = root().scale_factor();
+	auto& scale_factor = root().scale_factor();
 	RECT expected = { 0, 0, scale_factor.scale_x(final.width), scale_factor.scale_y(final.height) };
 	UINT format = DT_LEFT | DT_CALCRECT;
 	if (multiline_) format |= DT_WORDBREAK;

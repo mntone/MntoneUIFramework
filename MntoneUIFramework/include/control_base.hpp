@@ -11,6 +11,7 @@ class control_base
 
 public:
 	control_base();
+	virtual ~control_base() { }
 
 	virtual HRESULT initialize(control_base const& parent) noexcept;
 	HRESULT measure(::mnfx::size available) noexcept;

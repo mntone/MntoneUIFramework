@@ -2,6 +2,11 @@
 
 #include "targetver.h"
 
+#if _DEBUG
+#define _CRTDBG_MAP_ALLOC
+#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
+
 #include <cstdint>
 #include <algorithm>
 #include <numeric>

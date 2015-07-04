@@ -21,6 +21,8 @@ public:
 		}
 	}
 
+	virtual ~panel() { }
+
 protected:
 	virtual HRESULT measure_override(::mnfx::size available, ::mnfx::size& desired) noexcept;
 	virtual HRESULT arrange_override(::mnfx::rect& final) noexcept;
@@ -88,6 +90,8 @@ public:
 		if (row_definition_.size() == 0) row_definition_.emplace_back();
 		if (column_definition_.size() == 0) column_definition_.emplace_back();
 	}
+
+	virtual ~grid() { }
 
 protected:
 	virtual HRESULT measure_override(::mnfx::size available, ::mnfx::size& desired) noexcept;

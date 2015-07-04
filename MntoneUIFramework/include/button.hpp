@@ -19,6 +19,8 @@ public:
 		set_text(text);
 	}
 
+	virtual ~button() { }
+
 protected:
 	virtual HRESULT on_command(WORD id, WORD notify_code, bool& handled) noexcept;
 

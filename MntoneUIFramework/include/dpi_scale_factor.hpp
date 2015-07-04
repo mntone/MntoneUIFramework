@@ -3,7 +3,7 @@
 
 namespace mnfx {
 
-class dpi_scale_factor
+class dpi_scale_factor final
 {
 public:
 	using dpi_unit = float;
@@ -12,12 +12,12 @@ public:
 	{
 		if (os_version_ >= os_version::eight_one)
 		{
-			hdllinstance_ = LoadLibrary(L"shcore.dll");
+			hdllinstance_ = LoadLibraryW(L"shcore.dll");
 			fnGetDpiForMonitor = reinterpret_cast<GetDpiForMonitor*>(GetProcAddress(hdllinstance_, "GetDpiForMonitor"));
 		}
 	}
 
-	virtual ~dpi_scale_factor()
+	~dpi_scale_factor()
 	{
 		if (os_version_ >= os_version::eight_one)
 		{
@@ -82,6 +82,11 @@ public:
 	{
 		return static_cast<T>(static_cast<dpi_unit>(physical_x) / xdpi_);
 	}
+
+private:
+	dpi_scale_factor(dpi_scale_factor const&) = delete;
+
+	dpi_scale_factor& operator=(dpi_scale_factor const&) = delete;
 
 private:
 	HINSTANCE hdllinstance_;
