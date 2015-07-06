@@ -64,8 +64,8 @@ protected:
 	dialog_unit height_, width_;
 
 	bool measure_dirty_, arrange_dirty_;
-	::mnfx::size desired_size;
-	::mnfx::rect final_rect;
+	::mnfx::size desired_size_;
+	::mnfx::rect final_rect_;
 };
 
 }

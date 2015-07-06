@@ -87,10 +87,10 @@ HRESULT grid::measure_override(mnfx::size available, mnfx::size& desired) noexce
 		auto const get_pixel_length = [](dialog_unit s, grid_length g) -> dialog_unit { return s + (g.auto_() || g.star() ? 0 : g.length); };
 		auto const get_star_length = [](dialog_unit s, grid_length g) -> dialog_unit { return s + (g.auto_() ? 1 : (g.star() ? g.length : 0)); };
 		auto const get_length = [](grid_length g, dialog_unit pixel_per_star) -> dialog_unit { return g.auto_() ? pixel_per_star : (g.star() ? pixel_per_star * g.length : g.length); };
-		dialog_unit const row_pixel_sum = accumulate(row_definition_.cbegin(), row_definition_.cend(), 0.0, get_pixel_length);
-		dialog_unit const row_star_sum = accumulate(row_definition_.cbegin(), row_definition_.cend(), 0.0, get_star_length);
-		dialog_unit const column_pixel_sum = std::accumulate(column_definition_.cbegin(), column_definition_.cend(), 0.0, get_pixel_length);
-		dialog_unit const column_star_sum = std::accumulate(column_definition_.cbegin(), column_definition_.cend(), 0.0, get_star_length);
+		dialog_unit const row_pixel_sum = accumulate(row_definition_.cbegin(), row_definition_.cend(), static_cast<dialog_unit>(0), get_pixel_length);
+		dialog_unit const row_star_sum = accumulate(row_definition_.cbegin(), row_definition_.cend(), static_cast<dialog_unit>(0), get_star_length);
+		dialog_unit const column_pixel_sum = std::accumulate(column_definition_.cbegin(), column_definition_.cend(), static_cast<dialog_unit>(0), get_pixel_length);
+		dialog_unit const column_star_sum = std::accumulate(column_definition_.cbegin(), column_definition_.cend(), static_cast<dialog_unit>(0), get_star_length);
 
 		dialog_unit row_pixel_for_star = available.height - row_pixel_sum;
 		dialog_unit row_pixel_per_star = row_pixel_for_star / row_star_sum;
@@ -192,10 +192,10 @@ HRESULT grid::arrange_override(rect& final) noexcept
 		auto const get_pixel_length = [](dialog_unit s, grid_length g) -> dialog_unit { return s + (g.auto_() || g.star() ? 0 : g.length); };
 		auto const get_star_length = [](dialog_unit s, grid_length g) -> dialog_unit { return s + (g.auto_() ? 1 : (g.star() ? g.length : 0)); };
 		auto const get_length = [](grid_length g, dialog_unit pixel_per_star) -> dialog_unit { return g.auto_() ? pixel_per_star : (g.star() ? pixel_per_star * g.length : g.length); };
-		dialog_unit const row_pixel_sum = accumulate(row_definition_.cbegin(), row_definition_.cend(), 0.0, get_pixel_length);
-		dialog_unit const row_star_sum = accumulate(row_definition_.cbegin(), row_definition_.cend(), 0.0, get_star_length);
-		dialog_unit const column_pixel_sum = std::accumulate(column_definition_.cbegin(), column_definition_.cend(), 0.0, get_pixel_length);
-		dialog_unit const column_star_sum = std::accumulate(column_definition_.cbegin(), column_definition_.cend(), 0.0, get_star_length);
+		dialog_unit const row_pixel_sum = accumulate(row_definition_.cbegin(), row_definition_.cend(), static_cast<dialog_unit>(0), get_pixel_length);
+		dialog_unit const row_star_sum = accumulate(row_definition_.cbegin(), row_definition_.cend(), static_cast<dialog_unit>(0), get_star_length);
+		dialog_unit const column_pixel_sum = std::accumulate(column_definition_.cbegin(), column_definition_.cend(), static_cast<dialog_unit>(0), get_pixel_length);
+		dialog_unit const column_star_sum = std::accumulate(column_definition_.cbegin(), column_definition_.cend(), static_cast<dialog_unit>(0), get_star_length);
 
 		dialog_unit row_pixel_for_star = final.height - row_pixel_sum;
 		dialog_unit row_pixel_per_star = row_pixel_for_star / row_star_sum;

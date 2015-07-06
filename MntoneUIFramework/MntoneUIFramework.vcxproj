@@ -92,6 +92,7 @@
     <ClInclude Include="include\dpi_scale_factor.hpp" />
     <ClInclude Include="include\hwnd_base.hpp" />
     <ClInclude Include="include\layouts.hpp" />
+    <ClInclude Include="include\module.hpp" />
     <ClInclude Include="include\os_version.hpp" />
     <ClInclude Include="include\parameters.hpp" />
     <ClInclude Include="include\radio_button.hpp" />
@@ -106,6 +107,7 @@
   <ItemGroup>
     <ClCompile Include="source\button.cpp" />
     <ClCompile Include="source\hwnd_base.cpp" />
+    <ClCompile Include="source\module.cpp" />
     <ClCompile Include="source\radio_button.cpp" />
     <ClCompile Include="source\control_base.cpp" />
     <ClCompile Include="source\layouts.cpp" />

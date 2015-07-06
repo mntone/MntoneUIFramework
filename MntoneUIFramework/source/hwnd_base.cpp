@@ -66,7 +66,7 @@ HRESULT hwnd_base::measure_override(mnfx::size available, mnfx::size& desired) n
 	return S_OK;
 }
 
-HRESULT hwnd_base::arrange_override(rect& final) noexcept
+HRESULT hwnd_base::arrange_override(rect& /*final*/) noexcept
 {
 	return S_OK;
 }

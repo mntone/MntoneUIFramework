@@ -1,5 +1,6 @@
 #pragma once
 #include "os_version.hpp"
+#include "module.hpp"
 
 namespace mnfx {
 
@@ -9,28 +10,26 @@ public:
 	using dpi_unit = float;
 
 	dpi_scale_factor() noexcept
+		: enabled_(false)
 	{
 		if (os_version_ >= os_version::eight_one)
 		{
-			hdllinstance_ = LoadLibraryW(L"shcore.dll");
-			fnGetDpiForMonitor = reinterpret_cast<GetDpiForMonitor*>(GetProcAddress(hdllinstance_, "GetDpiForMonitor"));
-		}
-	}
-
-	~dpi_scale_factor()
-	{
-		if (os_version_ >= os_version::eight_one)
-		{
-			FreeLibrary(hdllinstance_);
+			HRESULT hr = S_OK;
+			module_ = ::std::make_shared<module>(L"shcore.dll", hr);
+			if (SUCCEEDED(hr))
+			{
+				get_dpi_for_monitor_ = reinterpret_cast<GetDpiForMonitor*>(GetProcAddress(module_->handle(), "GetDpiForMonitor"));
+				if (get_dpi_for_monitor_ != nullptr) enabled_ = true;
+			}
 		}
 	}
 
 	void initialize(HMONITOR hmonitor) noexcept
 	{
-		if (os_version_ >= os_version::eight_one)
+		if (enabled_)
 		{
 			UINT y, x;
-			fnGetDpiForMonitor(hmonitor, 0, &x, &y);
+			get_dpi_for_monitor_(hmonitor, 0, &x, &y);
 			ydpi_ = static_cast<dpi_unit>(y) / 96;
 			xdpi_ = static_cast<dpi_unit>(x) / 96;
 		}
@@ -89,12 +88,13 @@ private:
 	dpi_scale_factor& operator=(dpi_scale_factor const&) = delete;
 
 private:
-	HINSTANCE hdllinstance_;
 	dpi_unit ydpi_, xdpi_;
 	os_version os_version_;
 
-	typedef HRESULT __stdcall GetDpiForMonitor(HMONITOR hmonitor, int dpiType, UINT* dpiX, UINT* dpiY);
-	GetDpiForMonitor* fnGetDpiForMonitor;
+	using GetDpiForMonitor = HRESULT __stdcall(HMONITOR hmonitor, int dpiType, UINT* dpiX, UINT* dpiY);
+	bool enabled_;
+	::std::shared_ptr<module> module_;
+	GetDpiForMonitor* get_dpi_for_monitor_;
 };
 
 }

@@ -9,30 +9,30 @@ using namespace mnfx;
 HRESULT text_box::measure_override(mnfx::size available, mnfx::size& desired) noexcept
 {
 	auto& scale_factor = root().scale_factor();
-	RECT expected = { 0, 0, scale_factor.scale_x(available.width), scale_factor.scale_y(available.height) };
+	RECT expected = { 0, 0, static_cast<LONG>(ceil(scale_factor.scale_x(available.width))), static_cast<LONG>(ceil(scale_factor.scale_y(available.height))) };
 	UINT format = DT_LEFT | DT_CALCRECT;
 	if (multiline_) format |= DT_WORDBREAK;
 	HDC hdc = GetDC(hwnd());
 	DrawTextW(hdc, text_.c_str(), text_.length(), &expected, format);
 	ReleaseDC(hwnd(), hdc);
 
-	desired.height = scale_factor.scale_inverse_y<dialog_unit>(expected.bottom);
-	desired.width = scale_factor.scale_inverse_x<dialog_unit>(expected.right);
+	desired.height = scale_factor.scale_inverse_y<dialog_unit>(static_cast<dialog_unit>(expected.bottom));
+	desired.width = scale_factor.scale_inverse_x<dialog_unit>(static_cast<dialog_unit>(expected.right));
 	return S_OK;
 }
 
 HRESULT text_box::arrange_override(rect& final) noexcept
 {
 	auto& scale_factor = root().scale_factor();
-	RECT expected = { 0, 0, scale_factor.scale_x(final.width), scale_factor.scale_y(final.height) };
+	RECT expected = { 0, 0, static_cast<LONG>(ceil(scale_factor.scale_x(final.width))), static_cast<LONG>(ceil(scale_factor.scale_y(final.height))) };
 	UINT format = DT_LEFT | DT_CALCRECT;
 	if (multiline_) format |= DT_WORDBREAK;
 	HDC hdc = GetDC(hwnd());
 	DrawTextW(hdc, text_.c_str(), text_.length(), &expected, format);
 	ReleaseDC(hwnd(), hdc);
 
-	final.height = max(final.height, scale_factor.scale_inverse_y<dialog_unit>(expected.bottom));
-	final.width = max(final.width, scale_factor.scale_inverse_x<dialog_unit>(expected.right));
+	final.height = max(final.height, scale_factor.scale_inverse_y<dialog_unit>(static_cast<dialog_unit>(expected.bottom)));
+	final.width = max(final.width, scale_factor.scale_inverse_x<dialog_unit>(static_cast<dialog_unit>(expected.right)));
 	return S_OK;
 }
 

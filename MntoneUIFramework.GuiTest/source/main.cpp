@@ -4,7 +4,7 @@
 #include "button.hpp"
 #include "text_box.hpp"
 
-int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE hprevious_instance, _In_ LPWSTR command_line, _In_ int command_show)
+int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE /*hprevious_instance*/, _In_ LPWSTR /*command_line*/, _In_ int /*command_show*/)
 {
 	using namespace std;
 	using namespace mnfx;
@@ -17,7 +17,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE hprevious_ins
 	text_box* tb = new text_box(L"initial text.‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
 	button* btn = new button(L"push button sample");
 	size_t id = 0;
-	btn->click().add([](control_base const& s, event_args e)
+	btn->click().add([](control_base const& s, event_args /*e*/)
 	{
 		MessageBoxW(s.root().hwnd(), L"clicked.", L"sample dialog", MB_OK);
 		return S_OK;

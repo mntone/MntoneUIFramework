@@ -42,7 +42,7 @@ struct point final
 	point() : y(0), x(0) { }
 
 	point(dialog_unit y, dialog_unit x)
-		: y(0), x(0)
+		: y(y), x(x)
 	{ }
 };
 

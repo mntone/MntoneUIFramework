@@ -3,7 +3,7 @@
 
 using namespace mnfx;
 
-HRESULT button::on_command(WORD id, WORD notify_code, bool& handled) noexcept
+HRESULT button::on_command(WORD /*id*/, WORD notify_code, bool& handled) noexcept
 {
 	HRESULT hr = S_OK;
 

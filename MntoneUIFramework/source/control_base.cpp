@@ -50,7 +50,7 @@ HRESULT control_base::measure(mnfx::size available) noexcept
 		return S_FALSE;
 	}
 
-	desired_size = desired;
+	desired_size_ = desired;
 	measure_dirty_ = false;
 	return S_OK;
 }
@@ -74,9 +74,9 @@ HRESULT control_base::arrange(mnfx::rect final) noexcept
 		if (FAILED(hr)) return hr;
 		arrange_dirty_ = false;
 
-		if (final.y != final_rect.y || final.x != final_rect.x)
+		if (final.y != final_rect_.y || final.x != final_rect_.x)
 		{
-			if (final.height != final_rect.height || final.width != final_rect.width)
+			if (final.height != final_rect_.height || final.width != final_rect_.width)
 			{
 				on_rearrange(final);
 			}
@@ -85,7 +85,7 @@ HRESULT control_base::arrange(mnfx::rect final) noexcept
 				on_reposition(final.point());
 			}
 		}
-		else if (final.height != final_rect.height || final.width != final_rect.width)
+		else if (final.height != final_rect_.height || final.width != final_rect_.width)
 		{
 			on_resize(final.size());
 		}

@@ -83,7 +83,7 @@ HRESULT window::initialize(HINSTANCE hinstance, window const* owner) noexcept
 	return hr;
 }
 
-HRESULT window::initialize(control_base const& parent) noexcept
+HRESULT window::initialize(control_base const& /*parent*/) noexcept
 {
 	return E_UNEXPECTED;
 }
@@ -224,17 +224,17 @@ HRESULT window::set_position_and_size() noexcept
 	return SetWindowPos(hwnd(), nullptr, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, SWP_NOZORDER) != 0 ? S_OK : E_FAIL;
 }
 
-HRESULT window::on_reposition(mnfx::point point) noexcept
+HRESULT window::on_reposition(mnfx::point /*point*/) noexcept
 {
 	return S_OK;
 }
 
-HRESULT window::on_resize(mnfx::size size) noexcept
+HRESULT window::on_resize(mnfx::size /*size*/) noexcept
 {
 	return S_OK;
 }
 
-HRESULT window::on_rearrange(mnfx::rect pr) noexcept
+HRESULT window::on_rearrange(mnfx::rect /*rect*/) noexcept
 {
 	return S_OK;
 }

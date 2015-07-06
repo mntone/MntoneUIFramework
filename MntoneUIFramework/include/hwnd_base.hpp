@@ -27,7 +27,7 @@ protected:
 	virtual HRESULT on_resize(::mnfx::size size) noexcept;
 	virtual HRESULT on_rearrange(::mnfx::rect rect) noexcept;
 	virtual HRESULT on_command_internal(HWND target, WORD id, WORD notify_code, bool& handled, bool& traversed) noexcept;
-	virtual HRESULT on_command(WORD id, WORD notify_code, bool& handled) noexcept { return S_OK; }
+	virtual HRESULT on_command(WORD /*id*/, WORD /*notify_code*/, bool& /*handled*/) noexcept { return S_OK; }
 
 public:
 	virtual HWND const& hwnd() const noexcept { return hwnd_; }
