@@ -13,7 +13,7 @@ public:
 		, readonly_(false)
 	{
 		set_width(100);
-		set_style(style()| window_style::tab_stop | window_style::editcontrol_left | window_style::editcontrol_multiline | window_style::editcontrol_want_return | window_style::border);
+		set_style(style()| window_style::tab_stop | window_style::edit_left | window_style::edit_multiline | window_style::edit_want_return | window_style::border);
 	}
 
 	text_box(::std::wstring text)

@@ -54,13 +54,13 @@ void text_box::set_multiline(bool value) noexcept
 	auto current_style = style();
 	if (multiline_)
 	{
-		current_style |= window_style::editcontrol_multiline | window_style::editcontrol_want_return;
-		current_style &= ~window_style::editcontrol_auto_horizontal_scroll;
+		current_style |= window_style::edit_multiline | window_style::edit_want_return;
+		current_style &= ~window_style::edit_auto_horizontal_scroll;
 	}
 	else
 	{
-		current_style &= ~(window_style::editcontrol_multiline | window_style::editcontrol_want_return);
-		current_style |= window_style::editcontrol_auto_horizontal_scroll;
+		current_style &= ~(window_style::edit_multiline | window_style::edit_want_return);
+		current_style |= window_style::edit_auto_horizontal_scroll;
 	}
 	set_style(current_style);
 }
@@ -70,7 +70,7 @@ void text_box::set_readonly(bool value) noexcept
 	readonly_ = move(value);
 
 	auto current_style = style();
-	if (readonly_)current_style |= window_style::editcontrol_readonly;
-	else current_style &= ~window_style::editcontrol_readonly;
+	if (readonly_)current_style |= window_style::edit_readonly;
+	else current_style &= ~window_style::edit_readonly;
 	set_style(current_style);
 }
