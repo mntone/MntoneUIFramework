@@ -113,6 +113,7 @@
     <ClCompile Include="source\radio_button.cpp" />
     <ClCompile Include="source\control_base.cpp" />
     <ClCompile Include="source\layouts.cpp" />
+    <ClCompile Include="source\static_panel.cpp" />
     <ClCompile Include="source\text_box.cpp" />
     <ClCompile Include="source\window.cpp" />
     <ClCompile Include="source\pch.cpp">

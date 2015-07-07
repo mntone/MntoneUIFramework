@@ -71,6 +71,9 @@ struct rect final
 	::mnfx::size size() const { return ::mnfx::size(height, width); }
 };
 
+enum class horizontal_alignment : uint8_t { left = 0, center, right };
+enum class vertical_alignment : uint8_t { top = 0, center, bottom };
+
 template<typename sender, typename args>
 class typed_event_handler final
 {

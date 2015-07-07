@@ -3,6 +3,7 @@
 #include "layouts.hpp"
 #include "button.hpp"
 #include "text_box.hpp"
+#include "static_panel.hpp"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE /*hprevious_instance*/, _In_ LPWSTR /*command_line*/, _In_ int /*command_show*/)
 {
@@ -22,12 +23,32 @@ int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE /*hprevious_i
 		MessageBoxW(s.root().hwnd(), L"clicked.", L"sample dialog", MB_OK);
 		return S_OK;
 	}, id);
+
+	static_panel* firstname = new static_panel();
+	firstname->set_text(L"&to: ");
+	text_box* firstvalue = new text_box();
+	firstvalue->set_text(L"Taro");
+	static_panel* secondname = new static_panel();
+	secondname->set_text(L"&e-mail: ");
+	text_box* secondvalue = new text_box();
+	secondvalue->set_text(L"example@test.com");
+	grid* table = new grid(
+	{ grid_length(), grid_length() },
+	{ 80, grid_length() },
+	{
+		make_tuple(0, 0, firstname),
+		make_tuple(0, 1, firstvalue),
+		make_tuple(1, 0, secondname),
+		make_tuple(1, 1, secondvalue),
+	});
+
 	grid* root = new grid(
-	{ grid_length(), 28 },
+	{ 60, grid_length(), 28 },
 	{ },
 	{
-		make_tuple(0, 0, tb),
-		make_tuple(1, 0, btn),
+		make_tuple(0, 0, table),
+		make_tuple(1, 0, tb),
+		make_tuple(2, 0, btn),
 	});
 
 	unique_ptr<window> wnd = make_unique<window>();

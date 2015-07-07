@@ -81,7 +81,7 @@ HRESULT window::initialize(HINSTANCE hinstance, window const* owner) noexcept
 	if (FAILED(hr)) return hr;
 
 	non_client_metrics_.lfMessageFont.lfHeight = scale_factor_.scale_inverse_y(non_client_metrics_.lfMessageFont.lfHeight);
-	non_client_metrics_.lfMessageFont.lfWidth = scale_factor_.scale_inverse_y(non_client_metrics_.lfMessageFont.lfWidth);
+	non_client_metrics_.lfMessageFont.lfWidth = scale_factor_.scale_inverse_x(non_client_metrics_.lfMessageFont.lfWidth);
 	hr = set_font(new(nothrow) mnfx::font(non_client_metrics_.lfMessageFont));
 	if (FAILED(hr)) return hr;
 
