@@ -109,7 +109,7 @@ HRESULT grid::measure_override(mnfx::size available, mnfx::size& desired) noexce
 
 		dialog_unit row_pixel_for_star = available.height - row_pixel_sum;
 		dialog_unit row_pixel_per_star = row_pixel_for_star / row_star_sum;
-		dialog_unit column_pixel_for_star = available.width - column_star_sum;
+		dialog_unit column_pixel_for_star = available.width - column_pixel_sum;
 		dialog_unit column_pixel_per_star = column_pixel_for_star / column_star_sum;
 
 		if (!grid_info_valid()) reset_grid_info();
@@ -214,7 +214,7 @@ HRESULT grid::arrange_override(rect& final) noexcept
 
 		dialog_unit row_pixel_for_star = final.height - row_pixel_sum;
 		dialog_unit row_pixel_per_star = row_pixel_for_star / row_star_sum;
-		dialog_unit column_pixel_for_star = final.width - column_star_sum;
+		dialog_unit column_pixel_for_star = final.width - column_pixel_sum;
 		dialog_unit column_pixel_per_star = column_pixel_for_star / column_star_sum;
 
 		dialog_unit cy = final.y, cx = final.x;
