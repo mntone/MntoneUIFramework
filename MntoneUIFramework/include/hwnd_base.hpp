@@ -29,6 +29,9 @@ protected:
 	virtual HRESULT on_command_internal(HWND target, WORD id, WORD notify_code, bool& handled, bool& traversed) noexcept;
 	virtual HRESULT on_command(WORD /*id*/, WORD /*notify_code*/, bool& /*handled*/) noexcept { return S_OK; }
 
+	virtual HRESULT on_font_change(::mnfx::font* old_value, ::mnfx::font* new_value) noexcept;
+	HRESULT font_change_callback(::mnfx::font const& sender, event_args args) noexcept;
+
 public:
 	virtual HWND const& hwnd() const noexcept { return hwnd_; }
 	::std::wstring const& class_name() const noexcept { return class_name_; }
@@ -50,9 +53,7 @@ private:
 	HWND hwnd_;
 	window_style style_;
 	extended_window_style exstyle_;
-
-	static NONCLIENTMETRICSW non_client_metrics_;
-	static HFONT gui_font_;
+	size_t font_id_;
 };
 
 }

@@ -1,6 +1,8 @@
 #pragma once
+#include <ShellScalingApi.h>
 #include "os_version.hpp"
 #include "module.hpp"
+#include "parameters.hpp"
 
 namespace mnfx {
 
@@ -12,16 +14,33 @@ public:
 	dpi_scale_factor() noexcept
 		: enabled_(false)
 	{
+#if( WINVER >= 0x0603 )
 		if (os_version_ >= os_version::eight_one)
 		{
 			HRESULT hr = S_OK;
 			module_ = ::std::make_shared<module>(L"shcore.dll", hr);
 			if (SUCCEEDED(hr))
 			{
-				get_dpi_for_monitor_ = reinterpret_cast<GetDpiForMonitor*>(GetProcAddress(module_->handle(), "GetDpiForMonitor"));
-				if (get_dpi_for_monitor_ != nullptr) enabled_ = true;
+				get_process_dpi_awareness_ = reinterpret_cast<decltype(GetProcessDpiAwareness)*>(GetProcAddress(module_->handle(), "GetProcessDpiAwareness"));
+				if (get_process_dpi_awareness_ != nullptr)
+				{
+					PROCESS_DPI_AWARENESS awareness = PROCESS_DPI_AWARENESS::PROCESS_DPI_UNAWARE;
+					hr = get_process_dpi_awareness_(nullptr, &awareness);
+					if (SUCCEEDED(hr) && awareness != PROCESS_DPI_AWARENESS::PROCESS_DPI_UNAWARE)
+					{
+						get_dpi_for_monitor_ = reinterpret_cast<decltype(GetDpiForMonitor)*>(GetProcAddress(module_->handle(), "GetDpiForMonitor"));
+						if (get_dpi_for_monitor_ != nullptr)
+						{
+							enabled_ = true;
+							return;
+						}
+					}
+				}
+				get_process_dpi_awareness_ = nullptr;
 			}
+			module_ = nullptr;
 		}
+#endif
 	}
 
 	void initialize(HMONITOR hmonitor) noexcept
@@ -29,7 +48,7 @@ public:
 		if (enabled_)
 		{
 			UINT y, x;
-			get_dpi_for_monitor_(hmonitor, 0, &x, &y);
+			get_dpi_for_monitor_(hmonitor, MONITOR_DPI_TYPE::MDT_DEFAULT, &x, &y);
 			ydpi_ = static_cast<dpi_unit>(y) / 96;
 			xdpi_ = static_cast<dpi_unit>(x) / 96;
 		}
@@ -65,9 +84,13 @@ public:
 		scale_factor_y = new_ydpi / ydpi_;
 		scale_factor_x = new_xdpi / xdpi_;
 
+		dpi_unit old_ydpi, old_xdpi;
+		old_ydpi = ydpi_;
+		old_xdpi = xdpi_;
 		ydpi_ = new_ydpi;
 		xdpi_ = new_xdpi;
 
+		dpi_change_.invoke(*this, event_args());
 		return ::std::make_pair(scale_factor_y, scale_factor_x);
 	}
 
@@ -95,19 +118,21 @@ public:
 		return static_cast<T>(static_cast<dpi_unit>(physical_x) / xdpi_);
 	}
 
-private:
-	dpi_scale_factor(dpi_scale_factor const&) = delete;
-
-	dpi_scale_factor& operator=(dpi_scale_factor const&) = delete;
+public:
+	typed_event_handler<dpi_scale_factor, event_args> const& dpi_change() const noexcept { return dpi_change_; }
 
 private:
 	dpi_unit ydpi_, xdpi_;
 	os_version os_version_;
 
-	using GetDpiForMonitor = HRESULT __stdcall(HMONITOR hmonitor, int dpiType, UINT* dpiX, UINT* dpiY);
 	bool enabled_;
 	::std::shared_ptr<module> module_;
-	GetDpiForMonitor* get_dpi_for_monitor_;
+#if( WINVER >= 0x0603 )
+	decltype(GetProcessDpiAwareness)* get_process_dpi_awareness_;
+	decltype(GetDpiForMonitor)* get_dpi_for_monitor_;
+#endif
+
+	typed_event_handler<dpi_scale_factor, event_args> dpi_change_;
 };
 
 }

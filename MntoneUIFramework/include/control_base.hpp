@@ -1,5 +1,6 @@
 #pragma once
 #include "parameters.hpp"
+#include "font.hpp"
 
 namespace mnfx {
 
@@ -51,8 +52,14 @@ public:
 	::mnfx::size size() const noexcept { return ::mnfx::size(height_, width_); }
 	void set_size(::mnfx::size value) noexcept;
 
+	::mnfx::font* font() noexcept { return font_.get(); }
+	HRESULT set_font(::mnfx::font* value) noexcept;
+
 protected:
 	bool initialized() const noexcept { return initialized_; }
+
+	virtual HRESULT set_font_internal(::std::shared_ptr<mnfx::font> old_value, ::std::shared_ptr<mnfx::font> new_value) noexcept;
+	virtual HRESULT on_font_change(::mnfx::font* /*old_value*/, ::mnfx::font* /*new_value*/) noexcept { return S_OK; }
 
 protected:
 	static bool invalid_measure_message_queued;
@@ -62,6 +69,7 @@ protected:
 	bool initialized_, enable_;
 	::mnfx::margin margin_;
 	dialog_unit height_, width_;
+	::std::shared_ptr<::mnfx::font> font_;
 
 	bool measure_dirty_, arrange_dirty_;
 	::mnfx::size desired_size_;

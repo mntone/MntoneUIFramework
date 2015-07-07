@@ -70,17 +70,20 @@ public:
 
 	physical_unit top() const noexcept { return top_; }
 	physical_unit left() const noexcept { return left_; }
-	physical_unit bottom() const noexcept { return top_ + static_cast<physical_unit>(std::ceil(scale_factor_.scale_y(height_))); }
-	physical_unit right() const noexcept { return left_ + static_cast<physical_unit>(std::ceil(scale_factor_.scale_x(width_))); }
+	physical_unit bottom() const noexcept { return top_ + static_cast<physical_unit>(std::ceil(scale_factor().scale_y(height_))); }
+	physical_unit right() const noexcept { return left_ + static_cast<physical_unit>(std::ceil(scale_factor().scale_x(width_))); }
 
-	physical_unit physical_height() const noexcept { return static_cast<physical_unit>(std::ceil(scale_factor_.scale_y(height_))); }
-	physical_unit physical_width() const noexcept { return static_cast<physical_unit>(std::ceil(scale_factor_.scale_x(width_))); }
+	physical_unit physical_height() const noexcept { return static_cast<physical_unit>(std::ceil(scale_factor().scale_y(height_))); }
+	physical_unit physical_width() const noexcept { return static_cast<physical_unit>(std::ceil(scale_factor().scale_x(width_))); }
 
 	void set_top(physical_unit value) noexcept;
 	void set_left(physical_unit value) noexcept;
 
 	control_base const& child() const { return *child_.get(); }
 	void set_child(control_base* value) { child_.reset(value); }
+
+protected:
+	virtual HRESULT set_font_internal(::std::shared_ptr<mnfx::font> old_value, ::std::shared_ptr<mnfx::font> new_value) noexcept;
 
 private:
 	window const* owner_;
@@ -95,6 +98,8 @@ private:
 	//::std::pair<uint16_t, uint16_t> new_dpi_;
 
 	::std::unique_ptr<control_base> child_;
+
+	NONCLIENTMETRICSW non_client_metrics_;
 };
 
 }

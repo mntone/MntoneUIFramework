@@ -63,6 +63,21 @@ HRESULT panel::on_command_internal(HWND target, WORD id, WORD notify_code, bool&
 	return S_OK;
 }
 
+HRESULT panel::set_font_internal(::std::shared_ptr<mnfx::font> old_value, ::std::shared_ptr<mnfx::font> new_value) noexcept
+{
+	if (font_ != old_value) return S_OK;
+
+	HRESULT hr = on_font_change(old_value.get(), new_value.get());
+	if (FAILED(hr)) return hr;
+
+	for (auto&& child : children_)
+	{
+		HRESULT hr2 = child->set_font_internal(old_value, new_value);
+		if (FAILED(hr2)) hr = hr2;
+	}
+	return hr;
+}
+
 
 HRESULT grid::measure_override(mnfx::size available, mnfx::size& desired) noexcept
 {

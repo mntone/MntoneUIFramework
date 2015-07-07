@@ -71,16 +71,15 @@ struct rect final
 	::mnfx::size size() const { return ::mnfx::size(height, width); }
 };
 
-class control_base;
-template<typename args>
-class event_handler final
+template<typename sender, typename args>
+class typed_event_handler final
 {
 public:
-	event_handler()
+	typed_event_handler()
 		: unique_id_(1)
 	{ }
 
-	HRESULT add(::std::function<HRESULT(control_base const&, args)> callback, size_t& id) const noexcept
+	HRESULT add(::std::function<HRESULT(sender const&, args)> callback, ::std::size_t& id) const noexcept
 	{
 		auto tmp = callbacks_.size();
 		id = 0;
@@ -88,13 +87,16 @@ public:
 		id = tmp;
 		return S_OK;
 	}
-	HRESULT remove(size_t id) const noexcept
+	HRESULT remove(::std::size_t id) const noexcept
 	{
-		auto itr = callbacks_.erase(find(callbacks_.cbegin(), callbacks_.cend(), id));
-		return itr != callbacks_.cend() ? S_OK : S_FALSE;
+		auto itr = callbacks_.lower_bound(id);
+		if (itr == callbacks_.cend() || itr->first != id) return S_FALSE;
+
+		callbacks_.erase(itr);
+		return S_OK;
 	}
 
-	HRESULT invoke(control_base const& sender, args e) noexcept
+	HRESULT invoke(sender const& sender, args e) noexcept
 	{
 		if (callbacks_.size() == 0) return S_FALSE;
 
@@ -108,11 +110,17 @@ public:
 	}
 
 private:
-	mutable size_t unique_id_;
-	mutable ::std::unordered_map<size_t, ::std::function<HRESULT(control_base const&, args)>> callbacks_;
+	mutable ::std::size_t unique_id_;
+	mutable ::std::unordered_map<::std::size_t, ::std::function<HRESULT(sender const&, args)>> callbacks_;
 };
 
 struct event_args
 { };
+
+template<typename T>
+struct value_change_event_args
+{
+	T old_value, new_value;
+};
 
 }

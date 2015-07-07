@@ -7,23 +7,13 @@
 using namespace std;
 using namespace mnfx;
 
-NONCLIENTMETRICSW hwnd_base::non_client_metrics_;
-HFONT hwnd_base::gui_font_;
-
 hwnd_base::hwnd_base(::std::wstring class_name)
 	: hwnd_(nullptr)
 	, class_name_(class_name)
 	, text_(L"")
 	, style_(window_style::child | window_style::visible)
 	, exstyle_()
-{
-	if (!gui_font_)
-	{
-		non_client_metrics_ = { sizeof(NONCLIENTMETRICSW) };
-		SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICSW), &non_client_metrics_, 0);
-		gui_font_ = CreateFontIndirectW(&non_client_metrics_.lfMessageFont);
-	}
-}
+{ }
 
 hwnd_base::~hwnd_base()
 {
@@ -53,7 +43,10 @@ HRESULT hwnd_base::initialize(control_base const& parent) noexcept
 		nullptr);
 	if (!hwnd_) return E_FAIL;
 
-	win32::set_font(hwnd_, gui_font_);
+	if (font_ != nullptr && font_->handle() != nullptr)
+	{
+		win32::set_font(hwnd(), font_->handle());
+	}
 
 	HRESULT hr = on_initialize();
 	initialized_ = true;
@@ -115,6 +108,30 @@ HRESULT hwnd_base::on_command_internal(HWND target, WORD id, WORD notify_code, b
 		traversed = true;
 		return hr;
 	}
+	return S_OK;
+}
+
+HRESULT hwnd_base::on_font_change(::mnfx::font* old_value, ::mnfx::font* new_value) noexcept
+{
+	HRESULT hr = S_OK;
+	if (old_value != nullptr)
+	{
+		hr = old_value->font_change().remove(font_id_);
+	}
+	if (new_value != nullptr)
+	{
+		size_t id = 0;
+		hr = new_value->font_change().add(bind(&hwnd_base::font_change_callback, this, placeholders::_1, placeholders::_2), id);
+		font_id_ = id;
+
+		font_change_callback(*new_value, event_args());
+	}
+	return hr;
+}
+
+HRESULT hwnd_base::font_change_callback(::mnfx::font const& sender, event_args) noexcept
+{
+	win32::set_font(hwnd(), sender.handle());
 	return S_OK;
 }
 

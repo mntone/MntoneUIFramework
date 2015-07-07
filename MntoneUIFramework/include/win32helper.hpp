@@ -8,7 +8,7 @@ namespace win32 {
 inline HRESULT send_message(HWND target, ::mnfx::window_message message, WPARAM wparam, LPARAM lparam)
 {
 	LRESULT lr = SendMessageW(target, static_cast<UINT>(message), wparam, lparam);
-	return HRESULT_FROM_WIN32(lr);
+	return HRESULT_FROM_WIN32(static_cast<uint32_t>(lr));
 }
 
 inline HRESULT enable_window(HWND target, bool enable)
@@ -49,7 +49,7 @@ inline HRESULT set_size(HWND target, int32_t height, int32_t width)
 inline HRESULT set_font(HWND target, HFONT font, bool redraw = true)
 {
 	LRESULT lr = SendMessageW(target, WM_SETFONT, reinterpret_cast<WPARAM>(font), redraw ? TRUE : FALSE);
-	return HRESULT_FROM_WIN32(lr);
+	return HRESULT_FROM_WIN32(static_cast<uint32_t>(lr));
 }
 
 inline HRESULT set_style(HWND target, ::mnfx::window_style style)

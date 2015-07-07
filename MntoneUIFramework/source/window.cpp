@@ -29,6 +29,9 @@ window::window(wstring class_name)
 	set_width(640);
 	set_style(window_style::overlapped_window | window_style::visible);
 	set_exstyle(extended_window_style::control_parent);
+
+	non_client_metrics_ = { sizeof(NONCLIENTMETRICSW) };
+	SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICSW), &non_client_metrics_, 0);
 }
 
 window::window(wstring class_name, control_base* child)
@@ -75,6 +78,11 @@ HRESULT window::initialize(HINSTANCE hinstance, window const* owner) noexcept
 	if (b == 0) return HRESULT_FROM_WIN32(GetLastError());
 
 	hr = on_initialize();
+	if (FAILED(hr)) return hr;
+
+	non_client_metrics_.lfMessageFont.lfHeight = scale_factor_.scale_inverse_y(non_client_metrics_.lfMessageFont.lfHeight);
+	non_client_metrics_.lfMessageFont.lfWidth = scale_factor_.scale_inverse_y(non_client_metrics_.lfMessageFont.lfWidth);
+	hr = set_font(new(nothrow) mnfx::font(non_client_metrics_.lfMessageFont));
 	if (FAILED(hr)) return hr;
 
 	hr = set_position_and_size();
@@ -224,8 +232,8 @@ RECT window::get_window_size_from_client_area() noexcept
 	{
 		left_,
 		top_,
-		left_ + static_cast<physical_unit>(ceil(scale_factor_.scale_x(width_))),
-		top_ + static_cast<physical_unit>(ceil(scale_factor_.scale_y(height_)))
+		left_ + static_cast<physical_unit>(ceil(scale_factor().scale_x(width_))),
+		top_ + static_cast<physical_unit>(ceil(scale_factor().scale_y(height_)))
 	};
 	AdjustWindowRectEx(&rect, static_cast<DWORD>(style()), FALSE, static_cast<DWORD>(exstyle()));
 	return rect;
@@ -291,8 +299,8 @@ HRESULT window::prepare_resize(LPARAM lparam) noexcept
 {
 	if (initialized_)
 	{
-		uint16_t height = scale_factor_.scale_inverse_y(HIWORD(lparam));
-		uint16_t width = scale_factor_.scale_inverse_x(LOWORD(lparam));
+		uint16_t height = scale_factor().scale_inverse_y(HIWORD(lparam));
+		uint16_t width = scale_factor().scale_inverse_x(LOWORD(lparam));
 		height_ = height;
 		width_ = width;
 		return invalidate_measure();
@@ -419,4 +427,13 @@ void window::set_left(physical_unit value) noexcept
 {
 	left_ = value;
 	if (initialized_) on_reposition(mnfx::point());
+}
+
+HRESULT window::set_font_internal(shared_ptr<mnfx::font> old_value, shared_ptr<mnfx::font> new_value) noexcept
+{
+	HRESULT hr = on_font_change(old_value.get(), new_value.get());
+	if (FAILED(hr)) return hr;
+
+	if (child_ == nullptr) return S_OK;
+	return child_->set_font_internal(old_value, new_value);
 }

@@ -24,3 +24,4 @@
 #define NOMCX
 #include <Windows.h>
 #include <wrl\client.h>
+#include <ShellScalingApi.h>

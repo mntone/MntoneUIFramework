@@ -17,7 +17,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE /*hprevious_i
 	text_box* tb = new text_box(L"initial text.‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
 	button* btn = new button(L"push button sample");
 	size_t id = 0;
-	btn->click().add([](control_base const& s, event_args /*e*/)
+	btn->click().add([](button const& s, event_args /*e*/)
 	{
 		MessageBoxW(s.root().hwnd(), L"clicked.", L"sample dialog", MB_OK);
 		return S_OK;
@@ -34,7 +34,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE /*hprevious_i
 	wnd->set_child(root);
 	wnd->set_margin(9);
 	wnd->set_text(L"guitest window");
-
 	wnd->initialize(hinstance);
 	return wnd->run();
 }

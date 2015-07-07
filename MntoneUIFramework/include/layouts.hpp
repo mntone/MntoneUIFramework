@@ -38,6 +38,9 @@ public:
 	virtual HWND const& hwnd() const noexcept { return parent()->hwnd(); }
 
 protected:
+	virtual HRESULT set_font_internal(::std::shared_ptr<mnfx::font> old_value, ::std::shared_ptr<mnfx::font> new_value) noexcept;
+
+protected:
 	::std::vector<::std::unique_ptr<control_base>> children_;
 };
 

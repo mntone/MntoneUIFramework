@@ -25,10 +25,10 @@ protected:
 	virtual HRESULT on_command(WORD id, WORD notify_code, bool& handled) noexcept;
 
 public:
-	event_handler<event_args> const& click() { return click_; }
+	typed_event_handler<button, event_args> const& click() const noexcept { return click_; }
 
 private:
-	event_handler<event_args> click_;
+	typed_event_handler<button, event_args> click_;
 };
 
 }

@@ -144,3 +144,22 @@ void control_base::set_size(mnfx::size value) noexcept
 	width_ = move(value.width);
 	invalidate_measure();
 }
+
+HRESULT control_base::set_font(mnfx::font* value) noexcept
+{
+	if (value != nullptr && !value->initialized())
+	{
+		value->register_scale_factor(root().scale_factor_);
+	}
+
+	auto old_value = font_;
+	font_ = make_shared<mnfx::font>();
+	font_.reset(value);
+	return set_font_internal(old_value, font_);
+}
+
+HRESULT control_base::set_font_internal(shared_ptr<mnfx::font> old_value, shared_ptr<mnfx::font> new_value) noexcept
+{
+	if (font_ != old_value) return S_OK;
+	return on_font_change(old_value.get(), new_value.get());
+}
