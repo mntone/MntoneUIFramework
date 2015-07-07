@@ -342,14 +342,14 @@ HRESULT window::prepare_nc_hittest(LPARAM lparam, LRESULT& lr) noexcept
 	auto ht = static_cast<hit_test>(lr);
 	switch (ht)
 	{
-	case mnfx::hit_test::left:
-	case mnfx::hit_test::right:
-	case mnfx::hit_test::top:
-	case mnfx::hit_test::top_left:
-	case mnfx::hit_test::top_right:
-	case mnfx::hit_test::bottom:
-	case mnfx::hit_test::bottom_left:
-	case mnfx::hit_test::bottom_right:
+	case hit_test::left:
+	case hit_test::right:
+	case hit_test::top:
+	case hit_test::top_left:
+	case hit_test::top_right:
+	case hit_test::bottom:
+	case hit_test::bottom_left:
+	case hit_test::bottom_right:
 		border_ = true;
 		break;
 	}
