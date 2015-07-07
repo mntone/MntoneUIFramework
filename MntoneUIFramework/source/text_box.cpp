@@ -47,8 +47,9 @@ wstring const& text_box::text() const noexcept
 	return text_;
 }
 
-void text_box::set_multiline(bool value) noexcept
+HRESULT text_box::set_multiline(bool value) noexcept
 {
+	if (multiline_ == value) return S_OK;
 	multiline_ = move(value);
 
 	auto current_style = style();
@@ -63,14 +64,17 @@ void text_box::set_multiline(bool value) noexcept
 		current_style |= window_style::edit_auto_horizontal_scroll;
 	}
 	set_style(current_style);
+	return S_OK;
 }
 
-void text_box::set_readonly(bool value) noexcept
+HRESULT text_box::set_readonly(bool value) noexcept
 {
+	if (readonly_ == value) return S_OK;
 	readonly_ = move(value);
 
 	auto current_style = style();
 	if (readonly_)current_style |= window_style::edit_readonly;
 	else current_style &= ~window_style::edit_readonly;
 	set_style(current_style);
+	return S_OK;
 }

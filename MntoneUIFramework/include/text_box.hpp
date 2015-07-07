@@ -29,10 +29,10 @@ public:
 	::std::wstring const& text() const noexcept;
 
 	bool multiline() const noexcept { return multiline_; }
-	void set_multiline(bool value) noexcept;
+	HRESULT set_multiline(bool value) noexcept;
 
 	bool readonly() const noexcept { return readonly_; }
-	void set_readonly(bool value) noexcept;
+	HRESULT set_readonly(bool value) noexcept;
 
 private:
 	bool multiline_, readonly_;

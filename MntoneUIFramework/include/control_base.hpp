@@ -11,8 +11,8 @@ class control_base
 	friend class panel;
 
 public:
-	control_base();
-	virtual ~control_base() { }
+	control_base() noexcept;
+	virtual ~control_base() noexcept { }
 
 	virtual HRESULT initialize(control_base const& parent) noexcept;
 	HRESULT measure(::mnfx::size available) noexcept;
@@ -38,7 +38,7 @@ public:
 	virtual HWND const& hwnd() const noexcept = 0;
 
 	bool enable() const noexcept { return enable_; }
-	void set_enable(bool value) noexcept;
+	HRESULT set_enable(bool value) noexcept;
 
 	::mnfx::margin margin() const noexcept { return margin_; }
 	void set_margin(::mnfx::margin value) noexcept;

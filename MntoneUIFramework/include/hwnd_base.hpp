@@ -9,8 +9,8 @@ class hwnd_base
 	friend class window;
 
 public:
-	hwnd_base(::std::wstring class_name);
-	virtual ~hwnd_base();
+	hwnd_base(::std::wstring class_name) noexcept;
+	virtual ~hwnd_base() noexcept;
 
 public:
 	virtual HRESULT initialize(control_base const& parent) noexcept;

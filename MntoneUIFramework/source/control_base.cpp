@@ -10,7 +10,7 @@ using namespace mnfx;
 bool control_base::invalid_measure_message_queued = false;
 bool control_base::invalid_arrange_message_queued = false;
 
-control_base::control_base()
+control_base::control_base() noexcept
 	: initialized_(false)
 	, enable_(true)
 	, height_(auto_size)
@@ -114,10 +114,11 @@ HRESULT control_base::invalidate_arrange() noexcept
 	return win32::send_message(root().hwnd(), static_cast<window_message>(WM_INVALIDARRANGE), 0, 0);
 }
 
-void control_base::set_enable(bool value) noexcept
+HRESULT control_base::set_enable(bool value) noexcept
 {
+	if (enable_ == value) return S_OK;
 	enable_ = move(value);
-	on_enable(enable_);
+	return on_enable(enable_);
 }
 
 void control_base::set_margin(mnfx::margin value) noexcept

@@ -62,6 +62,12 @@
     <ClInclude Include="include\font.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\label.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\text_block.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\layouts.cpp">

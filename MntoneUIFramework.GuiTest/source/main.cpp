@@ -3,7 +3,7 @@
 #include "layouts.hpp"
 #include "button.hpp"
 #include "text_box.hpp"
-#include "static_panel.hpp"
+#include "label.hpp"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE /*hprevious_instance*/, _In_ LPWSTR /*command_line*/, _In_ int /*command_show*/)
 {
@@ -24,11 +24,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE /*hprevious_i
 		return S_OK;
 	}, id);
 
-	static_panel* firstname = new static_panel();
+	label* firstname = new label();
 	firstname->set_text(L"&to: ");
 	text_box* firstvalue = new text_box();
 	firstvalue->set_text(L"Taro");
-	static_panel* secondname = new static_panel();
+	label* secondname = new label();
 	secondname->set_text(L"&e-mail: ");
 	text_box* secondvalue = new text_box();
 	secondvalue->set_text(L"example@test.com");

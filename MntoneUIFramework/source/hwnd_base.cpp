@@ -7,7 +7,7 @@
 using namespace std;
 using namespace mnfx;
 
-hwnd_base::hwnd_base(::std::wstring class_name)
+hwnd_base::hwnd_base(::std::wstring class_name) noexcept
 	: hwnd_(nullptr)
 	, class_name_(class_name)
 	, text_(L"")
@@ -15,7 +15,7 @@ hwnd_base::hwnd_base(::std::wstring class_name)
 	, exstyle_()
 { }
 
-hwnd_base::~hwnd_base()
+hwnd_base::~hwnd_base() noexcept
 {
 	if (hwnd_)
 	{

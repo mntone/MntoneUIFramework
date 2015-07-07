@@ -92,12 +92,14 @@
     <ClInclude Include="include\dpi_scale_factor.hpp" />
     <ClInclude Include="include\font.hpp" />
     <ClInclude Include="include\hwnd_base.hpp" />
+    <ClInclude Include="include\label.hpp" />
     <ClInclude Include="include\layouts.hpp" />
     <ClInclude Include="include\module.hpp" />
     <ClInclude Include="include\os_version.hpp" />
     <ClInclude Include="include\parameters.hpp" />
     <ClInclude Include="include\radio_button.hpp" />
     <ClInclude Include="include\static_panel.hpp" />
+    <ClInclude Include="include\text_block.hpp" />
     <ClInclude Include="include\text_box.hpp" />
     <ClInclude Include="include\win32define.hpp" />
     <ClInclude Include="include\win32helper.hpp" />
