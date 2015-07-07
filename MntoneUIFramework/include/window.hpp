@@ -40,7 +40,7 @@ protected:
 	virtual HRESULT on_resize(::mnfx::size size) noexcept;
 	virtual HRESULT on_rearrange(::mnfx::rect rect) noexcept;
 	virtual HRESULT on_command_internal(HWND target, WORD id, WORD notify_code, bool& handled, bool& traversed) noexcept;
-	virtual HRESULT on_dpi_changed(const RECT /*suggest*/) const noexcept { return S_OK; }
+	virtual HRESULT on_dpi_changed(RECT /*suggest*/) noexcept;
 
 private:
 	virtual HRESULT initialize(control_base const& parent) noexcept;
@@ -51,9 +51,14 @@ private:
 	HRESULT set_size() noexcept;
 	HRESULT set_position_and_size() noexcept;
 
+	HRESULT prepare_move(LPARAM lparam) noexcept;
 	HRESULT prepare_resize(LPARAM lparam) noexcept;
 	HRESULT prepare_command(WPARAM wparam, LPARAM lparam, bool& handled) noexcept;
 	HRESULT prepare_dpi_changed(WPARAM wparam, LPARAM lparam) noexcept;
+
+	HRESULT prepare_nc_hittest(LPARAM lparam, LRESULT& lr) noexcept;
+	HRESULT on_enter_size_move() noexcept;
+	HRESULT on_exit_size_move() noexcept;
 
 	static LRESULT CALLBACK window_procedure_lancher(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
 
@@ -83,6 +88,11 @@ private:
 
 	physical_unit top_, left_;
 	dpi_scale_factor scale_factor_;
+
+	bool resizing_, border_;
+
+	//bool dpi_change_reserved_;
+	//::std::pair<uint16_t, uint16_t> new_dpi_;
 
 	::std::unique_ptr<control_base> child_;
 };

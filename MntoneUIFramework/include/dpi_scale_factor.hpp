@@ -42,6 +42,19 @@ public:
 		}
 	}
 
+	::std::pair<dpi_unit, dpi_unit> try_dpi(uint16_t y, uint16_t x) const noexcept
+	{
+		dpi_unit new_ydpi, new_xdpi;
+		new_ydpi = static_cast<dpi_unit>(y) / 96;
+		new_xdpi = static_cast<dpi_unit>(x) / 96;
+
+		float scale_factor_y, scale_factor_x;
+		scale_factor_y = new_ydpi / ydpi_;
+		scale_factor_x = new_xdpi / xdpi_;
+
+		return ::std::make_pair(scale_factor_y, scale_factor_x);
+	}
+
 	::std::pair<dpi_unit, dpi_unit> set_dpi(uint16_t y, uint16_t x) noexcept
 	{
 		dpi_unit new_ydpi, new_xdpi;

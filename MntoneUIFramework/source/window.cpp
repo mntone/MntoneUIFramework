@@ -22,6 +22,8 @@ window::window(wstring class_name)
 	, hinstance_(nullptr)
 	, top_(48)
 	, left_(48)
+	, resizing_(false)
+	, border_(false)
 {
 	set_height(360);
 	set_width(640);
@@ -129,6 +131,9 @@ HRESULT window::arrange_override(rect& final) noexcept
 
 LRESULT window::window_procedure(window_message message, WPARAM wparam, LPARAM lparam, bool& handled) noexcept
 {
+	HRESULT hr = S_OK;
+	LRESULT lr = 0;
+
 	if ((UINT)message == WM_INVALIDMEASURE)
 	{
 		measure(mnfx::size(height_, width_));
@@ -140,7 +145,7 @@ LRESULT window::window_procedure(window_message message, WPARAM wparam, LPARAM l
 	}
 	if ((UINT)message == WM_INVALIDARRANGE)
 	{
-		arrange(mnfx::rect(0, 0, height_, width_));
+		hr = arrange(mnfx::rect(0, 0, height_, width_));
 		invalid_arrange_message_queued = false;
 		handled = true;
 		return 0;
@@ -148,17 +153,27 @@ LRESULT window::window_procedure(window_message message, WPARAM wparam, LPARAM l
 
 	switch (message)
 	{
+	case window_message::move:
+		hr = prepare_move(lparam);
+		handled = true;
+		break;
+
 	case window_message::size:
-		prepare_resize(lparam);
+		hr = prepare_resize(lparam);
+		handled = true;
+		break;
+
+	case window_message::nc_hittest:
+		hr = prepare_nc_hittest(lparam, lr);
 		handled = true;
 		break;
 
 	case window_message::command:
-		prepare_command(wparam, lparam, handled);
+		hr = prepare_command(wparam, lparam, handled);
 		break;
 
 	case window_message::create:
-		on_create();
+		hr = on_create();
 		handled = true;
 		break;
 
@@ -167,13 +182,23 @@ LRESULT window::window_procedure(window_message message, WPARAM wparam, LPARAM l
 		handled = true;
 		break;
 
+#if( WINVER >= 0x0601 )
 	case window_message::dpi_changed:
-		prepare_dpi_changed(wparam, lparam);
+		hr = prepare_dpi_changed(wparam, lparam);
 		handled = true;
+		break;
+#endif
+
+	case window_message::enter_size_move:
+		hr = on_enter_size_move();
+		break;
+
+	case window_message::exit_size_move:
+		hr = on_exit_size_move();
 		break;
 	}
 
-	return 0;
+	return lr;
 }
 
 HRESULT window::register_window_class() noexcept
@@ -245,12 +270,29 @@ HRESULT window::on_command_internal(HWND target, WORD id, WORD notify_code, bool
 	return child_->on_command_internal(target, id, notify_code, handled, traversed);
 }
 
+
+HRESULT window::on_dpi_changed(RECT /*suggest*/) noexcept
+{
+	if (initialized_) return invalidate_measure();
+	return S_OK;
+}
+
+HRESULT window::prepare_move(LPARAM lparam) noexcept
+{
+	if (initialized_)
+	{
+		top_ = HIWORD(lparam);
+		left_ = LOWORD(lparam);
+	}
+	return S_OK;
+}
+
 HRESULT window::prepare_resize(LPARAM lparam) noexcept
 {
 	if (initialized_)
 	{
-		uint16_t const& height = scale_factor_.scale_inverse_y(HIWORD(lparam));
-		uint16_t const& width = scale_factor_.scale_inverse_x(LOWORD(lparam));
+		uint16_t height = scale_factor_.scale_inverse_y(HIWORD(lparam));
+		uint16_t width = scale_factor_.scale_inverse_x(LOWORD(lparam));
 		height_ = height;
 		width_ = width;
 		return invalidate_measure();
@@ -271,14 +313,61 @@ HRESULT window::prepare_dpi_changed(WPARAM wparam, LPARAM lparam) noexcept
 {
 	uint16_t const& ydpi = HIWORD(wparam);
 	uint16_t const& xdpi = LOWORD(wparam);
-	auto const& scale = scale_factor_.set_dpi(ydpi, xdpi);
-	height_ = scale.first * static_cast<dpi_scale_factor::dpi_unit>(height_);
-	width_ = scale.second * static_cast<dpi_scale_factor::dpi_unit>(width_);
+
+	//if (resizing_ && !border_)
+	//{
+	//	dpi_change_reserved_ = true;
+	//	new_dpi_ = make_pair(ydpi, xdpi);
+	//	return S_OK;
+	//}
+
+	auto scale = scale_factor_.set_dpi(ydpi, xdpi);
+	if (resizing_ && border_)
+	{
+		height_ /= scale.first;
+		width_ /= scale.second;
+	}
+
+	HRESULT hr = set_position_and_size();
+	if (FAILED(hr)) return hr;
 
 	RECT const& suggest = *reinterpret_cast<LPRECT>(lparam);
-	if (initialized_) invalidate_measure();
-
 	return on_dpi_changed(suggest);
+}
+
+HRESULT window::prepare_nc_hittest(LPARAM lparam, LRESULT& lr) noexcept
+{
+	lr = DefWindowProcW(hwnd(), static_cast<UINT>(window_message::nc_hittest), 0, lparam);
+
+	auto ht = static_cast<hit_test>(lr);
+	switch (ht)
+	{
+	case mnfx::hit_test::left:
+	case mnfx::hit_test::right:
+	case mnfx::hit_test::top:
+	case mnfx::hit_test::top_left:
+	case mnfx::hit_test::top_right:
+	case mnfx::hit_test::bottom:
+	case mnfx::hit_test::bottom_left:
+	case mnfx::hit_test::bottom_right:
+		border_ = true;
+		break;
+	}
+	return S_OK;
+}
+
+HRESULT window::on_enter_size_move() noexcept
+{
+	resizing_ = true;
+	return S_OK;
+}
+
+HRESULT window::on_exit_size_move() noexcept
+{
+	resizing_ = false;
+	border_ = false;
+	//dpi_change_reserved_ = false;
+	return S_OK;
 }
 
 LRESULT CALLBACK window::window_procedure_lancher(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam)
@@ -297,7 +386,7 @@ LRESULT CALLBACK window::window_procedure_lancher(HWND hwnd, UINT message, WPARA
 		SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(wnd));
 
 		bool handled = false;
-		const LRESULT& lresult = wnd->window_procedure(static_cast<window_message>(message), wparam, lparam, handled);
+		LRESULT lresult = wnd->window_procedure(static_cast<window_message>(message), wparam, lparam, handled);
 		if (!handled)
 		{
 			return DefWindowProcW(hwnd, message, wparam, lparam);
@@ -312,7 +401,7 @@ LRESULT CALLBACK window::window_procedure_lancher(HWND hwnd, UINT message, WPARA
 	}
 
 	bool handled = false;
-	LRESULT const& lresult = wnd->window_procedure(static_cast<window_message>(message), wparam, lparam, handled);
+	LRESULT lresult = wnd->window_procedure(static_cast<window_message>(message), wparam, lparam, handled);
 	if (!handled)
 	{
 		return DefWindowProcW(hwnd, message, wparam, lparam);

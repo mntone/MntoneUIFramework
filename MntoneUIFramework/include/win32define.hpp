@@ -582,4 +582,40 @@ enum class button_notify_code : WORD
 };
 DEFINE_ENUM_BIT_CALC(button_notify_code);
 
+enum class hit_test : int16_t
+{
+	error = HTERROR,
+	transparent = HTTRANSPARENT,
+	no_where = HTNOWHERE,
+	client = HTCLIENT,
+	caption = HTCAPTION,
+	system_menu = HTSYSMENU,
+	grow_box = HTGROWBOX,
+	size = HTSIZE,
+	menu = HTMENU,
+	horizontal_scroll = HTHSCROLL,
+	vertical_scroll = HTVSCROLL,
+	minimize_button = HTMINBUTTON,
+	maximize_button = HTMAXBUTTON,
+	left = HTLEFT,
+	right = HTRIGHT,
+	top = HTTOP,
+	top_left = HTTOPLEFT,
+	top_right = HTTOPRIGHT,
+	bottom = HTBOTTOM,
+	bottom_left = HTBOTTOMLEFT,
+	bottom_right = HTBOTTOMRIGHT,
+	border = HTBORDER,
+	reduce = HTREDUCE,
+	zoom = HTZOOM,
+	size_first = HTSIZEFIRST,
+	size_last = HTSIZELAST,
+#if(WINVER >= 0x0400)
+	object = HTOBJECT,
+	close = HTCLOSE,
+	help = HTHELP,
+#endif
+};
+DEFINE_ENUM_BIT_CALC(hit_test);
+
 }
