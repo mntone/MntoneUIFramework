@@ -68,6 +68,15 @@
     <ClInclude Include="include\text_block.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\combo_box_base.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\collections_impl.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\collections.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\layouts.cpp">
@@ -101,6 +110,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\static_panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\combo_box_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

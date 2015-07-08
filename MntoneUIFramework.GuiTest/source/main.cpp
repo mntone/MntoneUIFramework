@@ -4,6 +4,8 @@
 #include "button.hpp"
 #include "text_box.hpp"
 #include "label.hpp"
+#include "combo_box_base.hpp"
+#include "collections_impl.hpp"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE /*hprevious_instance*/, _In_ LPWSTR /*command_line*/, _In_ int /*command_show*/)
 {
@@ -32,18 +34,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE /*hprevious_i
 	secondname->set_text(L"&e-mail: ");
 	text_box* secondvalue = new text_box();
 	secondvalue->set_text(L"example@test.com");
+	label* thirdname = new label();
+	thirdname->set_text(L"&priority: ");
+	dropdown_box* thirdvalue = new dropdown_box();
+	reinterpret_cast<observable_vector_impl<wstring>*>(&(thirdvalue->items()))->push_back(L"high");
+	reinterpret_cast<observable_vector_impl<wstring>*>(&(thirdvalue->items()))->push_back(L"low");
 	grid* table = new grid(
-	{ grid_length(), grid_length() },
+	{ grid_length(), grid_length(), grid_length() },
 	{ 80, grid_length() },
 	{
 		make_tuple(0, 0, firstname),
 		make_tuple(0, 1, firstvalue),
 		make_tuple(1, 0, secondname),
 		make_tuple(1, 1, secondvalue),
+		make_tuple(2, 0, thirdname),
+		make_tuple(2, 1, thirdvalue),
 	});
 
 	grid* root = new grid(
-	{ 60, grid_length(), 28 },
+	{ 70, grid_length(), 28 },
 	{ },
 	{
 		make_tuple(0, 0, table),

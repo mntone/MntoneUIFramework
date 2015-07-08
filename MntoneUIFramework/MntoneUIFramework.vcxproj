@@ -88,6 +88,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\button.hpp" />
+    <ClInclude Include="include\collections.hpp" />
+    <ClInclude Include="include\collections_impl.hpp" />
+    <ClInclude Include="include\combo_box_base.hpp" />
     <ClInclude Include="include\control_base.hpp" />
     <ClInclude Include="include\dpi_scale_factor.hpp" />
     <ClInclude Include="include\font.hpp" />
@@ -109,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\button.cpp" />
+    <ClCompile Include="source\combo_box_base.cpp" />
     <ClCompile Include="source\font.cpp" />
     <ClCompile Include="source\hwnd_base.cpp" />
     <ClCompile Include="source\module.cpp" />

@@ -13,6 +13,7 @@ inline _T_ operator~(_T_ one) { return static_cast<_T_>(~static_cast<_T_ ## _t>(
 
 namespace mnfx {
 
+#ifndef NOWINMESSAGES
 enum class window_message : UINT
 {
 	null = WM_NULL,
@@ -168,7 +169,7 @@ enum class window_message : UINT
 	gesture = WM_GESTURE,
 	gesture_notify = WM_GESTURENOTIFY,
 #endif
-	menu_select = WM_MENUSELECT,
+	menu_selection = WM_MENUSELECT,
 	menu_char = WM_MENUCHAR,
 	enter_idle = WM_ENTERIDLE,
 #if( WINVER >= 0x0500 )
@@ -285,7 +286,7 @@ enum class window_message : UINT
 	ime_notify = WM_IME_NOTIFY,
 	ime_control = WM_IME_CONTROL,
 	ime_composition_full = WM_IME_COMPOSITIONFULL,
-	ime_select = WM_IME_SELECT,
+	ime_selection = WM_IME_SELECT,
 	ime_char = WM_IME_CHAR,
 #endif
 #if( WINVER >= 0x0500 )
@@ -388,8 +389,169 @@ enum class window_message : UINT
 #endif
 
 	user = WM_USER,
+
+	edit_get_selection = EM_GETSEL,
+	edit_set_selection = EM_SETSEL,
+	edit_get_rectangle = EM_GETRECT,
+	edit_set_rectangle = EM_SETRECT,
+	edit_set_rectangle_nullptr = EM_SETRECTNP,
+	edit_scroll = EM_SCROLL,
+	edit_line_scroll = EM_LINESCROLL,
+	edit_scroll_caret = EM_SCROLLCARET,
+	edit_get_modify = EM_GETMODIFY,
+	edit_set_modify = EM_SETMODIFY,
+	edit_get_line_count = EM_GETLINECOUNT,
+	edit_line_index = EM_LINEINDEX,
+	edit_set_handle = EM_SETHANDLE,
+	edit_get_handle = EM_GETHANDLE,
+	edit_get_thumb = EM_GETTHUMB,
+	edit_line_length = EM_LINELENGTH,
+	edit_replace_selection = EM_REPLACESEL,
+	edit_get_line = EM_GETLINE,
+	edit_limit_text = EM_LIMITTEXT,
+	edit_can_undo = EM_CANUNDO,
+	edit_undo = EM_UNDO,
+	edit_flag_multiline = EM_FMTLINES,
+	edit_line_from_char = EM_LINEFROMCHAR,
+	edit_set_tabstops = EM_SETTABSTOPS,
+	edit_set_password_char = EM_SETPASSWORDCHAR,
+	edit_empty_undo_buffer = EM_EMPTYUNDOBUFFER,
+	edit_get_first_visible_line = EM_GETFIRSTVISIBLELINE,
+	edit_set_readonly = EM_SETREADONLY,
+	edit_set_word_break_procedure = EM_SETWORDBREAKPROC,
+	edit_get_word_break_procedure = EM_GETWORDBREAKPROC,
+	edit_get_password_char = EM_GETPASSWORDCHAR,
+#if(WINVER >= 0x0400)
+	edit_set_margins = EM_SETMARGINS,
+	edit_get_margins = EM_GETMARGINS,
+	edit_set_limit_text = EM_SETLIMITTEXT,   /* ;win40 Name change */
+	edit_get_limit_text = EM_GETLIMITTEXT,
+	edit_position_from_char = EM_POSFROMCHAR,
+	edit_char_from_position = EM_CHARFROMPOS,
+#endif
+
+#if(WINVER >= 0x0500)
+	edit_set_ime_status = EM_SETIMESTATUS,
+	edit_get_ime_status = EM_GETIMESTATUS,
+#endif
+
+	list_box_add_string = LB_ADDSTRING,
+	list_box_insert_string = LB_INSERTSTRING,
+	list_box_delete_string = LB_DELETESTRING,
+	list_box_select_item_range_extra = LB_SELITEMRANGEEX,
+	list_box_reset_content = LB_RESETCONTENT,
+	list_box_set_selection = LB_SETSEL,
+	list_box_set_current_selection = LB_SETCURSEL,
+	list_box_get_selection = LB_GETSEL,
+	list_box_get_current_selection = LB_GETCURSEL,
+	list_box_get_text = LB_GETTEXT,
+	list_box_get_text_length = LB_GETTEXTLEN,
+	list_box_get_count = LB_GETCOUNT,
+	list_box_select_string = LB_SELECTSTRING,
+	list_box_direction = LB_DIR,
+	list_box_get_top_index = LB_GETTOPINDEX,
+	list_box_find_string = LB_FINDSTRING,
+	list_box_get_selection_count = LB_GETSELCOUNT,
+	list_box_get_selection_items = LB_GETSELITEMS,
+	list_box_selection_tabstops = LB_SETTABSTOPS,
+	list_box_get_horizontal_extent = LB_GETHORIZONTALEXTENT,
+	list_box_set_horizontal_extent = LB_SETHORIZONTALEXTENT,
+	list_box_set_column_width = LB_SETCOLUMNWIDTH,
+	list_box_add_file = LB_ADDFILE,
+	list_box_set_top_index = LB_SETTOPINDEX,
+	list_box_get_item_rectangle = LB_GETITEMRECT,
+	list_box_get_item_data = LB_GETITEMDATA,
+	list_box_set_item_data = LB_SETITEMDATA,
+	list_box_select_item_range = LB_SELITEMRANGE,
+	list_box_set_anchor_index = LB_SETANCHORINDEX,
+	list_box_get_anchor_index = LB_GETANCHORINDEX,
+	list_box_set_caret_index = LB_SETCARETINDEX,
+	list_box_get_caret_index = LB_GETCARETINDEX,
+	list_box_set_item_height = LB_SETITEMHEIGHT,
+	list_box_get_item_height = LB_GETITEMHEIGHT,
+	list_box_find_string_exact = LB_FINDSTRINGEXACT,
+	list_box_set_locale = LB_SETLOCALE,
+	list_box_get_locale = LB_GETLOCALE,
+	list_box_set_count = LB_SETCOUNT,
+#if(WINVER >= 0x0400)
+	list_box_initialize_storage = LB_INITSTORAGE,
+	list_box_item_from_point = LB_ITEMFROMPOINT,
+#endif
+#if defined(_WIN32_WCE) && (_WIN32_WCE >= 0x0400)
+	list_box_multiple_add_string = LB_MULTIPLEADDSTRING,
+#endif
+
+
+#if(_WIN32_WINNT >= 0x0501)
+#define LB_GETLISTBOXINFO       0x01B2
+#endif
+
+#if(_WIN32_WINNT >= 0x0501)
+#define LB_MSGMAX               0x01B3
+#elif defined(_WIN32_WCE) && (_WIN32_WCE >= 0x0400)
+#define LB_MSGMAX               0x01B1
+#elif(WINVER >= 0x0400)
+#define LB_MSGMAX               0x01B0
+#else
+#define LB_MSGMAX               0x01A8
+#endif
+
+	combo_box_get_edit_selection = CB_GETEDITSEL,
+	combo_box_limit_text = CB_LIMITTEXT,
+	combo_box_set_edit_selection = CB_SETEDITSEL,
+	combo_box_add_string = CB_ADDSTRING,
+	combo_box_delete_string = CB_DELETESTRING,
+	combo_box_directory = CB_DIR,
+	combo_box_get_count = CB_GETCOUNT,
+	combo_box_get_current_selection = CB_GETCURSEL,
+	combo_box_get_list_box_text = CB_GETLBTEXT,
+	combo_box_get_list_box_text_length = CB_GETLBTEXTLEN,
+	combo_box_insert_string = CB_INSERTSTRING,
+	combo_box_reset_content = CB_RESETCONTENT,
+	combo_box_find_string = CB_FINDSTRING,
+	combo_box_select_string = CB_SELECTSTRING,
+	combo_box_set_current_selection = CB_SETCURSEL,
+	combo_box_show_dropdown = CB_SHOWDROPDOWN,
+	combo_box_get_item_data = CB_GETITEMDATA,
+	combo_box_set_item_data = CB_SETITEMDATA,
+	combo_box_get_dropped_control_rectangle = CB_GETDROPPEDCONTROLRECT,
+	combo_box_set_item_height = CB_SETITEMHEIGHT,
+	combo_box_get_item_height = CB_GETITEMHEIGHT,
+	combo_box_set_extended_ui = CB_SETEXTENDEDUI,
+	combo_box_get_extended_ui = CB_GETEXTENDEDUI,
+	combo_box_get_dropped_state = CB_GETDROPPEDSTATE,
+	combo_box_find_string_exact = CB_FINDSTRINGEXACT,
+	combo_box_set_locale = CB_SETLOCALE,
+	combo_box_get_locale = CB_GETLOCALE,
+#if(WINVER >= 0x0400)
+	combo_box_get_top_index = CB_GETTOPINDEX,
+	combo_box_set_top_index = CB_SETTOPINDEX,
+	combo_box_get_horizontal_extent = CB_GETHORIZONTALEXTENT,
+	combo_box_set_horzontal_extent = CB_SETHORIZONTALEXTENT,
+	combo_box_get_dropped_width = CB_GETDROPPEDWIDTH,
+	combo_box_set_dropped_width = CB_SETDROPPEDWIDTH,
+	combo_box_initialize_storage = CB_INITSTORAGE,
+#if defined(_WIN32_WCE) &&(_WIN32_WCE >= 0x0400)
+	combo_box_multiple_add_string = CB_MULTIPLEADDSTRING,
+#endif
+#endif
+
+#if(_WIN32_WINNT >= 0x0501)
+	combo_box_get_combo_box_information = CB_GETCOMBOBOXINFO,
+#endif
+
+#if(_WIN32_WINNT >= 0x0501)
+	combo_box_message_maximize = CB_MSGMAX,
+#elif defined(_WIN32_WCE) && (_WIN32_WCE >= 0x0400)
+	combo_box_message_maximize = CB_MSGMAX,
+#elif(WINVER >= 0x0400)
+	combo_box_message_maximize = CB_MSGMAX,
+#else
+	combo_box_message_maximize = CB_MSGMAX,
+#endif
 };
 
+#ifndef NOWINSTYLES
 enum class window_style : DWORD
 {
 	overlapped = WS_OVERLAPPED,
@@ -506,6 +668,44 @@ enum class window_style : DWORD
 	static_path_ellipsis = SS_PATHELLIPSIS,
 	static_word_ellipsis = SS_WORDELLIPSIS,
 	static_ellipsis_mask = SS_ELLIPSISMASK,
+
+	list_box_notify = LBS_NOTIFY,
+	list_box_sort = LBS_SORT,
+	list_box_noredraw = LBS_NOREDRAW,
+	list_box_multiple_selection = LBS_MULTIPLESEL,
+	list_box_ownerdraw_fixed = LBS_OWNERDRAWFIXED,
+	list_box_ownerdraw_variable = LBS_OWNERDRAWVARIABLE,
+	list_box_has_strings = LBS_HASSTRINGS,
+	list_box_use_tabstops = LBS_USETABSTOPS,
+	list_box_no_integral_height = LBS_NOINTEGRALHEIGHT,
+	list_box_multi_column = LBS_MULTICOLUMN,
+	list_box_want_keyboard_input = LBS_WANTKEYBOARDINPUT,
+	list_box_extended_selection = LBS_EXTENDEDSEL,
+	list_box_disable_no_scroll = LBS_DISABLENOSCROLL,
+	list_box_no_data = LBS_NODATA,
+#if(WINVER >= 0x0400)
+	list_box_no_selection = LBS_NOSEL,
+#endif
+	list_box_combo_box = LBS_COMBOBOX,
+
+	list_box_standard = LBS_STANDARD,
+
+	combo_box_simple = CBS_SIMPLE,
+	combo_box_dropdown = CBS_DROPDOWN,
+	combo_box_dropdownlist = CBS_DROPDOWNLIST,
+	combo_box_ownerdraw_fixed = CBS_OWNERDRAWFIXED,
+	combo_box_ownerdraw_variable = CBS_OWNERDRAWVARIABLE,
+	combo_box_auto_horizontal_scroll = CBS_AUTOHSCROLL,
+	combo_box_oem_convert = CBS_OEMCONVERT,
+	combo_box_sort = CBS_SORT,
+	combo_box_has_strings = CBS_HASSTRINGS,
+	combo_box_no_intergral_height = CBS_NOINTEGRALHEIGHT,
+	combo_box_disable_no_scroll = CBS_DISABLENOSCROLL,
+
+#if(WINVER >= 0x0400)
+	combo_box_uppercase = CBS_UPPERCASE,
+	combo_box_lowercase = CBS_LOWERCASE,
+#endif
 };
 DEFINE_ENUM_BIT_CALC(window_style);
 
@@ -564,8 +764,27 @@ enum class extended_window_style : DWORD
 #endif
 };
 DEFINE_ENUM_BIT_CALC(extended_window_style);
+#endif
 
-enum class button_notify_code : WORD
+enum class edit_notify_code : int16_t
+{
+	set_focus = EN_SETFOCUS,
+	kill_focus = EN_KILLFOCUS,
+	change = EN_CHANGE,
+	update = EN_UPDATE,
+	error_space = EN_ERRSPACE,
+	maximize_text = EN_MAXTEXT,
+	horizontal_scroll = EN_HSCROLL,
+	vertical_scroll = EN_VSCROLL,
+
+#if(_WIN32_WINNT >= 0x0500)
+	align_ltr = EN_ALIGN_LTR_EC,
+	align_rtl = EN_ALIGN_RTL_EC,
+#endif
+};
+DEFINE_ENUM_BIT_CALC(edit_notify_code);
+
+enum class button_notify_code : int16_t
 {
 	clicked = BN_CLICKED,
 	paint = BN_PAINT,
@@ -581,6 +800,34 @@ enum class button_notify_code : WORD
 #endif
 };
 DEFINE_ENUM_BIT_CALC(button_notify_code);
+
+enum class list_box_notify_code : int16_t
+{
+	error_space = LBN_ERRSPACE,
+	selection_change = LBN_SELCHANGE,
+	double_click = LBN_DBLCLK,
+	selection_cancel = LBN_SELCANCEL,
+	set_focus = LBN_SETFOCUS,
+	kill_focus = LBN_KILLFOCUS,
+};
+DEFINE_ENUM_BIT_CALC(list_box_notify_code);
+
+enum class combo_box_notify_code : int16_t
+{
+	error_space = CBN_ERRSPACE,
+	selection_change = CBN_SELCHANGE,
+	double_click = CBN_DBLCLK,
+	set_focus = CBN_SETFOCUS,
+	kill_focus = CBN_KILLFOCUS,
+	edit_change = CBN_EDITCHANGE,
+	edit_update = CBN_EDITUPDATE,
+	dropdown = CBN_DROPDOWN,
+	close_up = CBN_CLOSEUP,
+	selection_end_ok = CBN_SELENDOK,
+	selection_end_cancel = CBN_SELENDCANCEL,
+};
+DEFINE_ENUM_BIT_CALC(combo_box_notify_code);
+#endif
 
 enum class hit_test : int16_t
 {

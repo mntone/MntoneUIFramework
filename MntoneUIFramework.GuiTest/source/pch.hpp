@@ -27,6 +27,7 @@
 #define NOPROFILER
 #define NODEFERWINDOWPOS
 #define NOMCX
+#define NOMDI
 #include <Windows.h>
 #include <wrl\client.h>
 #include <ShellScalingApi.h>
