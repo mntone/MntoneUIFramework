@@ -22,7 +22,7 @@ private:
 public:
 	observable_vector<::std::wstring>& items() noexcept { return *items_.get(); }
 
-	typed_event_handler<combo_box_base, value_change_event_args<::std::wstring>> select() const noexcept { return select_; }
+	typed_event_handler<combo_box_base, value_change_event_args<::std::wstring>> const& select() const noexcept { return select_; }
 
 private:
 	size_t items_id_;
