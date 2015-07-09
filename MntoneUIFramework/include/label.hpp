@@ -7,6 +7,10 @@ class label final
 	: public static_panel
 {
 public:
+	label() noexcept
+		: static_panel()
+	{ }
+
 	label(::std::wstring text) noexcept
 		: static_panel()
 	{

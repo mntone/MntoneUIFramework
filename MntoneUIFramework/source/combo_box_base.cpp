@@ -34,8 +34,16 @@ HRESULT combo_box_base::on_command(WORD id, WORD notify_code, bool& handled) noe
 	switch (nc)
 	{
 	case combo_box_notify_code::selection_change:
+	{
+		auto old = select_value_;
 		select_value_ = win32::get_selected_text(hwnd());
+
+		value_change_event_args<wstring> args;
+		args.old_value = old;
+		args.new_value = select_value_;
+		select_.invoke(*this, args);
 		break;
+	}
 	}
 	return hr;
 }
