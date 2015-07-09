@@ -79,7 +79,7 @@ inline ::std::wstring get_selected_text(HWND target)
 	::std::vector<wchar_t> buffer;
 	buffer.resize(length + 1);
 	send_message(target, ::mnfx::window_message::combo_box_get_list_box_text, index, reinterpret_cast<LPARAM>(buffer.data()));
-	return ::std::wstring(buffer.data(), buffer.size());
+	return ::std::wstring(buffer.data(), length);
 }
 
 inline HRESULT push_item_to_combo_box(HWND target, ::std::wstring text)
