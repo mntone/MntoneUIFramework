@@ -108,6 +108,7 @@ wstring const& combo_box_base::text() const noexcept
 		auto const& length = static_cast<wstring::size_type>(GetWindowTextLengthW(hwnd()));
 		text_.resize(length + 1);
 		GetWindowTextW(hwnd(), &text_[0], length + 1);
+		text_.resize(length);
 	}
 	return text_;
 }
