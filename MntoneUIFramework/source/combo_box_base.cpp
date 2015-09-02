@@ -33,6 +33,7 @@ HRESULT combo_box_base::on_command(WORD id, WORD notify_code, bool& handled) noe
 	auto const nc = static_cast<combo_box_notify_code>(notify_code);
 	switch (nc)
 	{
+	case combo_box_notify_code::edit_change:
 	case combo_box_notify_code::selection_change:
 	{
 		auto old = select_value_;
