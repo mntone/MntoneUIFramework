@@ -36,7 +36,7 @@ HRESULT combo_box_base::on_command(WORD id, WORD notify_code, bool& handled) noe
 	case combo_box_notify_code::selection_change:
 	{
 		auto old = select_value_;
-		select_value_ = win32::get_selected_text();
+		select_value_ = win32::get_selected_text(hwnd());
 
 		value_change_event_args<wstring> args;
 		args.old_value = old;
