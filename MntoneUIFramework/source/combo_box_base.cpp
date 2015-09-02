@@ -37,7 +37,7 @@ HRESULT combo_box_base::on_command(WORD id, WORD notify_code, bool& handled) noe
 	case combo_box_notify_code::selection_change:
 	{
 		auto old = select_value_;
-		select_value_ = win32::get_selected_text(hwnd());
+		select_value_ = text();
 
 		value_change_event_args<wstring> args;
 		args.old_value = old;
@@ -99,4 +99,15 @@ void combo_box_base::insert(vector_change_event_args<wstring> args, HRESULT& /*h
 			itr->next();
 		}
 	}
+}
+
+wstring const& combo_box_base::text() const noexcept
+{
+	if (initialized())
+	{
+		auto const& length = static_cast<wstring::size_type>(GetWindowTextLengthW(hwnd()));
+		text_.resize(length + 1);
+		GetWindowTextW(hwnd(), &text_[0], length + 1);
+	}
+	return text_;
 }

@@ -20,6 +20,8 @@ private:
 	void insert(vector_change_event_args<::std::wstring> args, HRESULT& hr) noexcept;
 
 public:
+	::std::wstring const& text() const noexcept;
+
 	observable_vector<::std::wstring>& items() noexcept { return *items_.get(); }
 
 	typed_event_handler<combo_box_base, value_change_event_args<::std::wstring>> const& select() const noexcept { return select_; }
